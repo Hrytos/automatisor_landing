@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Customer Acquiisiton - Automatisor</title>
+<meta name="description" content="Automatisor helps warehouse automation providers acquire, retain and expand their customer base." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/styles.css" />
+<link rel="icon" href="/images/headerlogo.svg" type="image/svg+xml">
+<%- include('partials/analytics') %>
+</head>
+<body>
+
+<div class="bg-grid" aria-hidden="true"></div>
+
+<%- include('partials/header', { showProductLink: false, headerCtaText: 'Find my next Opportunity' }) %>
+
+<main>
+
+  <video class="main-bg-video" autoplay muted loop playsinline preload="auto" aria-hidden="true">
+    <source src="/images/herobgvideo.mp4" type="video/mp4">
+  </video>
+  <div class="main-bg-video-overlay" aria-hidden="true"></div>
+
+  <!-- ============ HERO ============ -->
+  <section class="hero">
+    <div class="container hero-inner">
+      <h1 class="hero-title">
+        Your next automation opportunity is<br>
+        hiding in <span class="text-accent">warehouses you already target.</span><br>
+        Find it before your competitors do.
+      </h1>
+      <p class="hero-sub">
+        We identify warehouses worth pursuing, uncover why they are strong automation candidates and prospect with confidence.
+      </p>
+      <div class="hero-actions">
+        <a href="/demo" class="btn btn-light btn-lg">Find my next Opportunity</a>
+        <!-- <a href="#sample" class="btn btn-outline btn-lg">Talk to us</a> -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ HAND US A MARKET PANEL ============ -->
+  <section class="market-panel-wrap">
+    <div class="container">
+      <div class="market-panel">
+        <div class="market-panel-head">
+          <div class="badge-pill">
+            <strong>Warehouse Intelligence</strong><span class="sep">|</span>For Automation Providers
+          </div>
+          <h2>Your scarcest resource is time.<br>Spend it on the right warehouses.</h2>
+          <p>Conversations, Google, Linkedin, Maps, Glassdoor, Indeed, Publications, Company website, Case Studies, Blogs, Local News, Financial Reports, Images, Regulatory Filings, Employee Reviews.... <br><br> 47 open tabs, hours gone into research, still unsure if this warehouse is worth my time! Sounds familiar? </p>
+        </div>
+
+        <div class="market-panel-dark">
+          <div class="step-row">
+            <div class="step-card">
+              <span class="step-num">1</span>
+              <p>Give us your target accounts.</p>
+            </div>
+            <div class="step-card">
+              <span class="step-num">2</span>
+              <p>We discover its facilities & thoroughly research them.</p>
+            </div>
+            <div class="step-card">
+              <span class="step-num">3</span>
+              <p>You get a qualified list of warehouses to engage with along with discovery prep.</p>
+            </div>
+          </div>
+
+          <div class="market-visual-row">
+            <div class="chat-demo">
+              <span class="chat-demo-badge"><span class="chat-demo-dot"></span>Live Demo</span>
+              <div class="chat-thread" id="chat-thread" data-persona="sales" aria-live="polite"></div>
+            </div>
+
+            <div class="market-sample">
+              <h3>Try for Free</h3>
+              <p>Which warehouse opportunity do you definitely want to close? <br><br>We identify warehouses worth pursuing, uncover why they are strong automation candidates and prepare you for discovery. <br><br> No obligations, no credit card.</p>
+              <a href="/demo" class="btn btn-dark btn-lg">Find my next Opportunity</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SCREEN THOUSANDS ============ 
+  <section class="criteria-section">
+    <div class="container">
+      <div class="section-head section-head-center">
+        <div class="tag-pill"><span class="dot"></span>ICP MATCHING</div>
+        <h2>Screen Thousands Against Your Criteria</h2>
+        <p>You tell us your thesis. The software compares every company against it, line by line.</p>
+      </div>
+
+      <div class="criteria-list">
+        <div class="criteria-row">
+          <p><strong>B2B SaaS company in the Healthcare EHR space, 200-1000 employees and last raised between
+            Series A and Series C</strong> — the target operates a multi-tenant clinical platform sold to mid-market
+            hospital systems, with headcount growth over 40% in the trailing twelve months.</p>
+          <span class="pill pill-green">92% MATCH</span>
+        </div>
+        <div class="criteria-row">
+          <p><strong>End of Diagnostic Devices FDA-cleared class II device manufacturer</strong> — company holds an
+            active 510(k) clearance, ships to at least three distribution regions, and has filed for a follow-on
+            clearance in the last eighteen months.</p>
+          <span class="pill pill-green">88% MATCH</span>
+        </div>
+        <div class="criteria-row">
+          <p><strong>Vendor of Revenue Cycle Management SaaS software with $10M-$50M in annual recurring revenue
+            and a self-serve onboarding motion</strong> — sales-led growth with a dedicated partnerships team and
+            documented API integrations.</p>
+          <span class="pill pill-green">81% MATCH</span>
+        </div>
+        <div class="criteria-row">
+          <p><strong>Lead completed a Series C round led by a healthcare-focused fund within the last 90
+            days</strong> — publicly announced financing, use-of-funds language referencing go-to-market expansion.</p>
+          <span class="pill pill-green">77% MATCH</span>
+        </div>
+        <div class="criteria-row">
+          <p><strong>Facilities office DIY care network operating fewer than five locations and no digital
+            intake system</strong> — no recent hiring signal, no technology stack disclosed, headcount under
+            growth threshold.</p>
+          <span class="pill pill-red">NO MATCH</span>
+        </div>
+      </div>
+    </div>
+  </section> 
+  -->
+
+<%- include('partials/warehouse-research') %>
+
+  <%- include('partials/signal-section') %>
+
+  <%- include('partials/engine-section', {
+    engineHeading: 'Supercharge warehouse customer acquisition',
+    engineParagraph: "Which warehouse opportunity do you definitely want to close? <br><br>We identify warehouses worth pursuing, uncover why they are strong automation candidates and prepare you for discovery. <br><br> No obligations, no credit card.",
+    engineCtaHref: '/demo',
+    engineCtaText: 'Find my next Opportunity'
+  }) %>
+
+  <!-- ============ PRICING ============ 
+  <section class="pricing-section" id="pricing">
+    <div class="container">
+      <div class="section-head section-head-center">
+        <div class="tag-pill"><span class="dot"></span>PRICING</div>
+        <h2>Pricing</h2>
+        <p>Simple, transparent pricing that scales with your team.</p>
+      </div>
+
+      <div class="pricing-card">
+        <div class="pricing-card-head">
+          <span class="pricing-plan">Standard</span>
+          <div class="pricing-amount"><span class="currency">$</span>100<span class="period">/facility /year</span></div>
+        </div>
+        <ul class="pricing-features">
+          <li><span class="check">&check;</span> Unlimited company &amp; executive research</li>
+          <li><span class="check">&check;</span> Full market-mapping engine</li>
+          <li><span class="check">&check;</span> 20+ verified source types per profile</li>
+          <li><span class="check">&check;</span> Exportable, ranked prospect lists</li>
+          <li><span class="check">&check;</span> Real-time refresh on a schedule</li>
+        </ul>
+        <a href="#start" class="btn btn-light btn-lg pricing-cta">Start Free Trial</a>
+        <p class="pricing-note">3 day free trial, cancel anytime.</p>
+      </div>
+    </div>
+  </section> -->
+
+</main>
+
+<%- include('partials/footer') %>
+
+<script src="/js/chat-demo.js"></script>
+<script src="/js/source-map.js"></script>
+<script src="/js/main.js"></script>
+</body>
+</html>

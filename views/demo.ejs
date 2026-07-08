@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Book a Demo — Automatisor</title>
+<meta name="description" content="Automatisor helps warehouse automation providers acquire, retain and expand their customer base." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/styles.css" />
+<link rel="icon" href="/images/headerlogo.svg" type="image/svg+xml">
+<%- include('partials/analytics') %>
+</head>
+<body>
+
+<div class="bg-grid" aria-hidden="true"></div>
+
+<%- include('partials/header', { showProductLink: false, showHeaderActions: false }) %>
+
+<main>
+
+  <video class="main-bg-video" autoplay muted loop playsinline preload="auto" aria-hidden="true">
+    <source src="/images/herobgvideo.mp4" type="video/mp4">
+  </video>
+  <div class="main-bg-video-overlay" aria-hidden="true"></div>
+
+  <!-- ============ BOOKING ============ -->
+  <section class="booking-section">
+    <div class="container">
+      <div class="section-head section-head-center">
+        <div class="tag-pill"><span class="dot"></span>BOOK A DEMO</div>
+        <h2>Let's find time to talk.</h2>
+        <p>Pick a slot below and we'll walk you through how Automatisor maps and monitors your warehouse accounts.</p>
+      </div>
+
+      <div class="booking-embed">
+       <!-- Cal inline embed code begins -->
+          <div style="width:100%;height:100%;overflow:scroll" id="my-cal-inline-60min"></div>
+          <script type="text/javascript">
+            (function (C, A, L) { let p = function (a, ar) { a.q.push(ar); }; let d = C.document; C.Cal = C.Cal || function () { let cal = C.Cal; let ar = arguments; if (!cal.loaded) { cal.ns = {}; cal.q = cal.q || []; d.head.appendChild(d.createElement("script")).src = A; cal.loaded = true; } if (ar[0] === L) { const api = function () { p(api, arguments); }; const namespace = ar[1]; api.q = api.q || []; if(typeof namespace === "string"){cal.ns[namespace] = cal.ns[namespace] || api;p(cal.ns[namespace], ar);p(cal, ["initNamespace", namespace]);} else p(cal, ar); return;} p(cal, ar); }; })(window, "https://app.cal.com/embed/embed.js", "init");
+            Cal("init", "60min", {origin:"https://app.cal.com"});
+            Cal.config = Cal.config || {};
+            Cal.config.forwardQueryParams = true;
+
+            Cal.ns["60min"]("inline", {
+            elementOrSelector:"#my-cal-inline-60min",
+            config: {"layout":"month_view","useSlotsViewOnSmallScreen":"true"},
+            calLink: "krishna-r-wsxml0/60min",
+            });
+
+            Cal.ns["60min"]("ui", {"hideEventTypeDetails":false,"layout":"column_view"});
+          </script>
+        <!-- Cal inline embed code ends -->
+      </div>
+    </div>
+  </section>
+
+
+</main>
+
+<%- include('partials/footer') %>
+
+<script src="/js/main.js"></script>
+</body>
+</html>

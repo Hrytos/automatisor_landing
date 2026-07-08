@@ -1,0 +1,36 @@
+<!-- ============ WHOLE MARKET ============ -->
+<section class="engine-section" id="solutions">
+  <div class="container engine-inner">
+    <div class="engine-visual">
+      <svg viewBox="0 0 480 320" class="engine-svg" preserveAspectRatio="xMidYMid slice">
+        <defs>
+          <linearGradient id="engineGrad" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#f25c19" stop-opacity="0.5"/>
+            <stop offset="1" stop-color="#f25c19" stop-opacity="0"/>
+          </linearGradient>
+        </defs>
+        <rect width="480" height="320" fill="#101012"/>
+        <g stroke="#242428" stroke-width="1">
+          <line x1="0" y1="60" x2="480" y2="60"/>
+          <line x1="0" y1="140" x2="480" y2="140"/>
+          <line x1="0" y1="220" x2="480" y2="220"/>
+          <line x1="0" y1="300" x2="480" y2="300"/>
+          <line x1="80" y1="0" x2="80" y2="320"/>
+          <line x1="200" y1="0" x2="200" y2="320"/>
+          <line x1="320" y1="0" x2="320" y2="320"/>
+          <line x1="420" y1="0" x2="420" y2="320"/>
+        </g>
+        <path d="M40 260 L120 190 L200 230 L280 130 L360 170 L440 80" stroke="#f25c19" stroke-width="2" fill="none"/>
+        <path d="M40 260 L120 190 L200 230 L280 130 L360 170 L440 80 L440 320 L40 320 Z" fill="url(#engineGrad)" stroke="none"/>
+        <circle cx="440" cy="80" r="5" fill="#f25c19"/>
+      </svg>
+    </div>
+    <div class="engine-copy">
+      <div class="tag-pill"><span class="dot"></span>Try for Free </div>
+      <h2><%= engineHeading %></h2>
+      <p><%- engineParagraph %></p>
+
+      <a href="<%= engineCtaHref %>" class="btn btn-light"><%= engineCtaText %></a>
+    </div>
+  </div>
+</section>
