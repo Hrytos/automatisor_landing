@@ -250,8 +250,12 @@ button { font-family: inherit; cursor: pointer; }
   border-radius: var(--radius-md);
   padding: 16px;
   box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.5);
+  color: inherit;
+  text-decoration: none;
+  transition: border-color 0.15s ease;
 }
 .nav-hover-item:hover .nav-hover-panel { display: flex; }
+.nav-hover-panel:hover { border-color: var(--text-tertiary); }
 /* Bridge the gap between trigger and panel so the hover state survives the move. */
 .nav-hover-item::after {
   content: '';
@@ -591,7 +595,7 @@ button { font-family: inherit; cursor: pointer; }
   background: rgba(16, 16, 18, 0.85);
   border: 1px solid var(--border-light);
   border-radius: var(--radius-md);
-  min-height: 613px;
+  height: 613px;
   padding: 20px;
   display: flex;
   flex-direction: column;
@@ -606,41 +610,50 @@ button { font-family: inherit; cursor: pointer; }
   pointer-events: none;
 }
 
-.chat-demo-badge {
+.chat-demo-numbers {
   position: relative;
   z-index: 1;
   align-self: flex-start;
-  display: inline-flex;
-  align-items: center;
+  display: flex;
   gap: 8px;
-  background: var(--surface-2);
-  border: 1px solid var(--border-light);
-  color: var(--text-secondary);
-  font-size: 12px;
-  font-weight: 600;
-  padding: 6px 14px;
-  border-radius: var(--radius-pill);
 }
-.chat-demo-dot {
-  width: 6px; height: 6px;
+.chat-demo-number {
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   border-radius: 50%;
+  border: 2px solid transparent;
   background: var(--accent-green);
-  box-shadow: 0 0 0 3px var(--accent-green-bg);
+  color: #000;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: border-color 0.15s ease, transform 0.15s ease;
 }
+.chat-demo-number:hover { transform: translateY(-1px); }
+.chat-demo-number.is-active { border-color: var(--text-primary); }
 
 .chat-thread {
   position: relative;
   z-index: 1;
   flex: 1;
+  min-height: 0;
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
   gap: 16px;
   overflow-y: auto;
   overflow-x: hidden;
   scrollbar-width: none;
 }
 .chat-thread::-webkit-scrollbar { display: none; }
+/* Pushes a short conversation down to the bottom of the panel, same visual
+   effect as justify-content:flex-end but without that property's flexbox
+   quirk of clipping (instead of scrolling) once content overflows. */
+.chat-thread > .chat-message:first-child { margin-top: auto; }
 
 .chat-message {
   display: flex;
@@ -663,7 +676,7 @@ button { font-family: inherit; cursor: pointer; }
   font-weight: 700;
 }
 .chat-message--user .chat-avatar { background: var(--text-primary); color: #0a0a0b; }
-.chat-message--bot .chat-avatar { background: linear-gradient(135deg, #f25c19, #b8460f); color: #06231a; }
+.chat-message--bot .chat-avatar { background: #fff; color: #0a0a0b; }
 
 .chat-bubble-wrap {
   display: flex;
@@ -1443,7 +1456,7 @@ button { font-family: inherit; cursor: pointer; }
   .market-panel-dark { padding: 32px 20px 40px; }
   .step-row { grid-template-columns: 1fr; }
   .market-visual-row { grid-template-columns: 1fr; }
-  .chat-demo { min-height: 420px; }
+  .chat-demo { height: 546px; }
   .brief-layout { grid-template-columns: 1fr; }
   .brief-aside { position: static; }
   .signal-inner, .engine-inner { grid-template-columns: 1fr; }

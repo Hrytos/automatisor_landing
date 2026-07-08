@@ -129,5 +129,24 @@ document.addEventListener('DOMContentLoaded', () => {
     window.addEventListener('resize', () => {
       if (!isMobileLayout()) closeOverlay();
     });
+
+    // Shown by default on first load, mobile only — but just once per
+    // session, not on every page (persona links are real navigations, so
+    // without this it would reopen every time the visitor picks one).
+    const AUTO_SHOWN_KEY = 'automatisor:personaOverlayShown';
+    let alreadyAutoShown = true;
+    try {
+      alreadyAutoShown = sessionStorage.getItem(AUTO_SHOWN_KEY) === '1';
+    } catch (e) {
+      // Storage inaccessible (e.g. privacy mode) — fall back to not auto-showing.
+    }
+    if (isMobileLayout() && !alreadyAutoShown) {
+      openOverlay();
+      try {
+        sessionStorage.setItem(AUTO_SHOWN_KEY, '1');
+      } catch (e) {
+        // Ignore — worst case it shows again on the next page.
+      }
+    }
   }
 });

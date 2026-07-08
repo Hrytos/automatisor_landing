@@ -1,7 +1,10 @@
 /**
  * Chat demo component — animates a scripted "You" / "Automatisor" exchange
  * inside #chat-thread: user question types out, a thinking state shows,
- * then the response types in. Cycles through a handful of exchanges on loop.
+ * then the response types in. Plays through every exchange once on load,
+ * then stops. Each exchange also has a numbered circle (in
+ * #chat-demo-numbers) that jumps straight to it on click, interrupting
+ * whatever is currently playing.
  *
  * An answer can be a plain string (typed out character by character) or a
  * "rich" answer — { intro, table: { headers, rows }, bullets, outro } —
@@ -13,7 +16,13 @@
   const TYPE_SPEED_MS = 26;
   const THINKING_DURATION_MS = 1400;
   const HOLD_DURATION_MS = 2800;
-  const PAUSE_BETWEEN_MS = 2000;
+  const PAUSE_BETWEEN_MS = 900;
+
+  // Incremented every time a conversation (auto or clicked) starts playing.
+  // Every async step below checks it against the token it was handed and
+  // bails out as soon as it goes stale, so switching mid-animation cleanly
+  // abandons whatever was in flight instead of racing with it.
+  let playToken = 0;
 
   const CONVERSATION_SETS = {
     sales: [
@@ -97,11 +106,16 @@
     return { wrap, bubbleWrap, bubble };
   }
 
-  function typeInto(el, text) {
+  function typeInto(el, text, token) {
     return new Promise((resolve) => {
       let i = 0;
       el.classList.add('is-typing');
       const timer = setInterval(() => {
+        if (token !== playToken) {
+          clearInterval(timer);
+          resolve();
+          return;
+        }
         i += 1;
         el.textContent = text.slice(0, i);
         if (i >= text.length) {
@@ -128,8 +142,9 @@
 
   // Types the plain-text version of a markdown string, then swaps in the
   // formatted HTML (with <strong> tags) once typing finishes.
-  async function typeIntoRich(el, text) {
-    await typeInto(el, stripMarkdown(text));
+  async function typeIntoRich(el, text, token) {
+    await typeInto(el, stripMarkdown(text), token);
+    if (token !== playToken) return;
     el.innerHTML = renderMarkdown(text);
   }
 
@@ -198,7 +213,7 @@
     return row;
   }
 
-  async function revealRichAnswer(thread, bubbleWrap, bubble, answer) {
+  async function revealRichAnswer(thread, bubbleWrap, bubble, answer, token) {
     bubbleWrap.classList.add('chat-bubble-wrap--rich');
     bubble.classList.add('chat-bubble--rich');
     bubble.textContent = '';
@@ -206,7 +221,8 @@
     const intro = document.createElement('p');
     intro.className = 'chat-rich-line';
     bubble.appendChild(intro);
-    await typeIntoRich(intro, answer.intro);
+    await typeIntoRich(intro, answer.intro, token);
+    if (token !== playToken) return;
     thread.scrollTop = thread.scrollHeight;
 
     if (answer.table) {
@@ -214,6 +230,7 @@
       bubble.appendChild(table);
       thread.scrollTop = thread.scrollHeight;
       await wait(250);
+      if (token !== playToken) return;
     }
 
     if (answer.bullets) {
@@ -221,28 +238,45 @@
       bubble.appendChild(list);
       thread.scrollTop = thread.scrollHeight;
       await wait(250);
+      if (token !== playToken) return;
     }
 
     if (answer.outro) {
       const outro = document.createElement('p');
       outro.className = 'chat-rich-line';
       bubble.appendChild(outro);
-      await typeIntoRich(outro, answer.outro);
+      await typeIntoRich(outro, answer.outro, token);
+      if (token !== playToken) return;
     }
 
     bubbleWrap.appendChild(buildFeedbackRow());
     thread.scrollTop = thread.scrollHeight;
   }
 
-  async function playConversation(thread, convo) {
+  function setActiveNumber(numbersEl, index) {
+    if (!numbersEl) return;
+    Array.from(numbersEl.children).forEach((btn, i) => {
+      btn.classList.toggle('is-active', i === index);
+    });
+  }
+
+  // Plays one conversation end to end. `token` is the value playToken held
+  // when this run was kicked off — every step re-checks it and bails the
+  // instant it's stale, so an older run never fights a newer one for the
+  // DOM. Returns true if it ran to completion (used by the auto-sequence to
+  // decide whether it's still safe to advance to the next conversation).
+  async function playConversation(thread, convo, token, numbersEl, index) {
     thread.innerHTML = '';
+    setActiveNumber(numbersEl, index);
 
     // Step 1 — You ask a question
     const user = buildMessage('user');
     thread.appendChild(user.wrap);
-    await typeInto(user.bubble, convo.question);
+    await typeInto(user.bubble, convo.question, token);
+    if (token !== playToken) return false;
     thread.scrollTop = thread.scrollHeight;
     await wait(400);
+    if (token !== playToken) return false;
 
     // Step 2 — Automatisor is thinking
     const bot = buildMessage('bot');
@@ -251,29 +285,57 @@
     showThinking(bot.bubble);
     thread.scrollTop = thread.scrollHeight;
     await wait(THINKING_DURATION_MS);
+    if (token !== playToken) return false;
 
     // Step 3 — Automatisor responds
     bot.wrap.classList.remove('is-thinking');
     bot.bubble.textContent = '';
 
     if (isRichAnswer(convo.answer)) {
-      await revealRichAnswer(thread, bot.bubbleWrap, bot.bubble, convo.answer);
+      await revealRichAnswer(thread, bot.bubbleWrap, bot.bubble, convo.answer, token);
     } else {
-      await typeInto(bot.bubble, convo.answer);
+      await typeInto(bot.bubble, convo.answer, token);
       thread.scrollTop = thread.scrollHeight;
     }
+    if (token !== playToken) return false;
+
+    // Stays highlighted for as long as this conversation remains on screen —
+    // the next playConversation() call (auto-advance or a click) is what
+    // switches the highlight, via setActiveNumber() at its start.
 
     await wait(HOLD_DURATION_MS);
+    return token === playToken;
   }
 
-  async function runLoop(thread, conversations) {
-    let index = 0;
-    // eslint-disable-next-line no-constant-condition
-    while (true) {
-      await playConversation(thread, conversations[index % conversations.length]);
+  // Plays every conversation once, in order, then stops (no looping back
+  // to the start). Any manual number click bumps playToken, which makes
+  // the next iteration's stale check fail and ends this sequence for good.
+  async function playSequenceOnce(thread, conversations, numbersEl) {
+    for (let i = 0; i < conversations.length; i += 1) {
+      const token = ++playToken;
+      const completed = await playConversation(thread, conversations[i], token, numbersEl, i);
+      if (!completed) return;
       await wait(PAUSE_BETWEEN_MS);
-      index += 1;
+      if (token !== playToken) return;
     }
+  }
+
+  function playFromClick(thread, conversations, index, numbersEl) {
+    const token = ++playToken;
+    playConversation(thread, conversations[index], token, numbersEl, index);
+  }
+
+  function buildNumberCircles(numbersEl, thread, conversations) {
+    numbersEl.innerHTML = '';
+    conversations.forEach((_, i) => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'chat-demo-number';
+      btn.textContent = String(i + 1);
+      btn.setAttribute('aria-label', `Show conversation ${i + 1}`);
+      btn.addEventListener('click', () => playFromClick(thread, conversations, i, numbersEl));
+      numbersEl.appendChild(btn);
+    });
   }
 
   function init() {
@@ -281,7 +343,11 @@
     if (!thread) return;
     const persona = thread.dataset.persona || DEFAULT_PERSONA;
     const conversations = CONVERSATION_SETS[persona] || CONVERSATION_SETS[DEFAULT_PERSONA];
-    runLoop(thread, conversations);
+
+    const numbersEl = document.getElementById('chat-demo-numbers');
+    if (numbersEl) buildNumberCircles(numbersEl, thread, conversations);
+
+    playSequenceOnce(thread, conversations, numbersEl);
   }
 
   if (document.readyState === 'loading') {

@@ -7,7 +7,7 @@
     <nav class="main-nav">
       <div class="nav-hover-item">
         <a href="/" class="nav-hover-trigger">For Customer Success</a>
-        <div class="nav-hover-panel">
+        <a href="/" class="nav-hover-panel">
           <span class="nav-dropdown-item-field">
             <span class="nav-dropdown-item-label">For whom?</span>
             <span class="nav-dropdown-item-value">Customer Success, Account Management & Revenue teams</span>
@@ -16,11 +16,11 @@
             <span class="nav-dropdown-item-label">Benefit</span>
             <span class="nav-dropdown-item-value">Identify warehouses with expansion opportunity, renewal risks & churn signs.</span>
           </span>
-        </div>
+        </a>
       </div>
       <div class="nav-hover-item">
         <a href="/sales" class="nav-hover-trigger">For Customer Acquisition</a>
-        <div class="nav-hover-panel">
+        <a href="/sales" class="nav-hover-panel">
           <span class="nav-dropdown-item-field">
             <span class="nav-dropdown-item-label">For whom?</span>
             <span class="nav-dropdown-item-value">Sales, Business Development & Marketing teams</span>
@@ -29,7 +29,7 @@
             <span class="nav-dropdown-item-label">Benefit</span>
             <span class="nav-dropdown-item-value">Identify warehouses worth pursuing, uncover why they are a strong automation candidates & prospect with confidence.</span>
           </span>
-        </div>
+        </a>
       </div>
       <% if (typeof showProductLink !== 'undefined' && showProductLink) { %>
       <a href="#product">Product</a>
@@ -39,7 +39,7 @@
     </nav>
     <% if (typeof showHeaderActions === 'undefined' || showHeaderActions) { %>
     <div class="header-actions">
-      <a href="https://app.automatisor.com/auth" target="_blank" class="btn btn-ghost btn-sm header-login">Log in</a>
+      <a href="https://app.automatisor.com/auth" class="btn btn-ghost btn-sm header-login">Log in</a>
       <a href="/demo" class="btn btn-light btn-sm header-cta"><%= headerCtaText %></a>
       <button type="button" class="mobile-menu-trigger" aria-expanded="false" aria-controls="mobile-nav" aria-label="Open menu">
         <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -65,7 +65,7 @@
       <span class="mobile-nav-link-title">Product</span>
     </a>
     <% } %>
-    <a href="https://app.automatisor.com/auth" target="_blank" class="mobile-nav-link">
+    <a href="https://app.automatisor.com/auth" class="mobile-nav-link">
       <span class="mobile-nav-link-title">Log in</span>
     </a>
   </div>
