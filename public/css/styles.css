@@ -360,7 +360,7 @@ button { font-family: inherit; cursor: pointer; }
 /* ==========================================================================
    Booking (Cal.com embed)
    ========================================================================== */
-.booking-section { position: relative; z-index: 1; padding: 200px 0 100px; }
+.booking-section { position: relative; z-index: 1; padding: 144px 0 100px; }
 .booking-embed {
   max-width: 1100px;
   height: 780px;
