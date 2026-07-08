@@ -3,18 +3,38 @@ document.addEventListener('DOMContentLoaded', () => {
   // immediately followed by its own ".detail-row" — the pair is duplicated
   // together to add rows, so the detail row is found structurally (next
   // sibling) rather than by a hand-authored id, keeping the pair self-contained.
-  document.querySelectorAll('.row-expand-btn').forEach((btn, index) => {
-    const sampleRow = btn.closest('.sample-row');
-    const detailRow = sampleRow && sampleRow.nextElementSibling;
-    if (!detailRow || !detailRow.classList.contains('detail-row')) return;
+  // Only one row per table may be expanded at a time — opening one closes
+  // whichever else was open.
+  document.querySelectorAll('.sample-table--expandable').forEach((table) => {
+    const closers = [];
 
-    detailRow.id = detailRow.id || `detail-row-${index}`;
-    btn.setAttribute('aria-controls', detailRow.id);
+    table.querySelectorAll('.row-expand-btn').forEach((btn, index) => {
+      const sampleRow = btn.closest('.sample-row');
+      const detailRow = sampleRow && sampleRow.nextElementSibling;
+      if (!detailRow || !detailRow.classList.contains('detail-row')) return;
 
-    btn.addEventListener('click', () => {
-      const isExpanded = btn.getAttribute('aria-expanded') === 'true';
-      btn.setAttribute('aria-expanded', String(!isExpanded));
-      detailRow.hidden = isExpanded;
+      detailRow.id = detailRow.id || `detail-row-${index}`;
+      btn.setAttribute('aria-controls', detailRow.id);
+
+      const close = () => {
+        btn.setAttribute('aria-expanded', 'false');
+        detailRow.hidden = true;
+        sampleRow.classList.remove('is-expanded');
+        detailRow.classList.remove('is-expanded');
+      };
+      const open = () => {
+        closers.forEach((otherClose) => { if (otherClose !== close) otherClose(); });
+        btn.setAttribute('aria-expanded', 'true');
+        detailRow.hidden = false;
+        sampleRow.classList.add('is-expanded');
+        detailRow.classList.add('is-expanded');
+      };
+      closers.push(close);
+
+      btn.addEventListener('click', () => {
+        const isExpanded = btn.getAttribute('aria-expanded') === 'true';
+        isExpanded ? close() : open();
+      });
     });
   });
 
@@ -80,4 +100,34 @@ document.addEventListener('DOMContentLoaded', () => {
       if (e.key === 'Escape') close();
     });
   });
+
+  // Hero badge-pill (mobile only): tapping it opens a small overlay with
+  // the two persona cards. Inert on desktop — the trigger's click handler
+  // no-ops above the mobile breakpoint, and the overlay itself is hidden
+  // there via CSS as a second guard.
+  const isMobileLayout = () => window.matchMedia('(max-width: 960px)').matches;
+  const badgeTrigger = document.getElementById('hero-badge-trigger');
+  const overlay = document.getElementById('persona-overlay');
+
+  if (badgeTrigger && overlay) {
+    const closeOverlay = () => { overlay.hidden = true; };
+    const openOverlay = () => { overlay.hidden = false; };
+
+    badgeTrigger.addEventListener('click', () => {
+      if (!isMobileLayout()) return;
+      openOverlay();
+    });
+
+    overlay.querySelectorAll('[data-persona-overlay-close]').forEach((el) => {
+      el.addEventListener('click', closeOverlay);
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeOverlay();
+    });
+
+    window.addEventListener('resize', () => {
+      if (!isMobileLayout()) closeOverlay();
+    });
+  }
 });

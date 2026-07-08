@@ -28,6 +28,9 @@
   <!-- ============ HERO ============ -->
   <section class="hero">
     <div class="container hero-inner">
+      <button type="button" class="badge-pill hero-badge-trigger" id="hero-badge-trigger" aria-haspopup="dialog">
+            For<span class="sep">|</span><strong>Customer Acquistion</strong>
+      </button>
       <h1 class="hero-title">
         Your next automation opportunity is<br>
         hiding in <span class="text-accent">warehouses you already target.</span><br>
@@ -48,14 +51,14 @@
     <div class="container">
       <div class="market-panel">
         <div class="market-panel-head">
-          <div class="badge-pill">
-            <strong>Warehouse Intelligence</strong><span class="sep">|</span>For Automation Providers
-          </div>
           <h2>Your scarcest resource is time.<br>Spend it on the right warehouses.</h2>
           <p>Conversations, Google, Linkedin, Maps, Glassdoor, Indeed, Publications, Company website, Case Studies, Blogs, Local News, Financial Reports, Images, Regulatory Filings, Employee Reviews.... <br><br> 47 open tabs, hours gone into research, still unsure if this warehouse is worth my time! Sounds familiar? </p>
         </div>
 
         <div class="market-panel-dark">
+          <div class="step-row-head">
+            <h2 class="step-row-eyebrow">How Automatisor works</h2>
+          </div>
           <div class="step-row">
             <div class="step-card">
               <span class="step-num">1</span>
@@ -173,6 +176,8 @@
 </main>
 
 <%- include('partials/footer') %>
+
+<%- include('partials/persona-overlay') %>
 
 <script src="/js/chat-demo.js"></script>
 <script src="/js/source-map.js"></script>

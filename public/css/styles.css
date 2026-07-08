@@ -373,7 +373,7 @@ button { font-family: inherit; cursor: pointer; }
 .hero {
   position: relative;
   z-index: 1;
-  padding: 200px 0 64px;
+  padding: 144px 0 120px;
   text-align: center;
 }
 .hero-title {
@@ -386,6 +386,85 @@ button { font-family: inherit; cursor: pointer; }
 }
 .hero-title em { font-style: italic; font-weight: 500; color: var(--text-secondary); }
 .text-accent { color: var(--accent-green); }
+
+/* ---- Hero badge-pill: inverted (dark bg, light text/border) to sit on the dark hero background ---- */
+.hero-inner .badge-pill {
+  background: var(--bg);
+  border-color: var(--text-primary);
+  color: var(--text-primary);
+}
+.hero-inner .badge-pill strong,
+.hero-inner .badge-pill svg { color: var(--text-primary); }
+.hero-inner .badge-pill .sep { color: var(--text-primary); }
+
+/* ---- Persona overlay: mobile-only, opened by tapping the hero badge-pill ---- */
+.persona-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+.persona-overlay[hidden] { display: none; }
+.persona-overlay-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+}
+.persona-overlay-panel {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 360px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background: var(--surface);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  padding: 20px;
+  box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.7);
+  animation: personaOverlayIn 0.2s ease;
+}
+@keyframes personaOverlayIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.persona-overlay-close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: 1px solid var(--border-light);
+  background: transparent;
+  color: var(--text-secondary);
+}
+.persona-overlay-card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 16px;
+  margin-top: 8px;
+  border: 1px solid var(--border-light);
+  border-radius: 10px;
+  background: var(--surface-2);
+  transition: border-color 0.15s ease;
+}
+.persona-overlay-card:first-of-type { margin-top: 26px; }
+.persona-overlay-card:active { border-color: var(--text-tertiary); }
+
+/* Trigger + overlay only ever apply on mobile; hard-disabled above the
+   breakpoint so the desktop hero is never affected. */
+@media (min-width: 961px) {
+  .persona-overlay { display: none !important; }
+}
 
 .hero-sub {
   max-width: 660px;
@@ -439,6 +518,9 @@ button { font-family: inherit; cursor: pointer; }
   padding: 9px 18px 9px 14px;
   font-size: 13px;
   color: var(--light-panel-text-sub);
+  font-family: inherit;
+  cursor: default;
+  appearance: none;
 }
 .badge-pill svg { color: var(--light-panel-text-sub); flex-shrink: 0; }
 .badge-pill strong { color: var(--light-panel-text); font-weight: 600; }
@@ -450,6 +532,15 @@ button { font-family: inherit; cursor: pointer; }
   background: #101012;
   padding: 48px 56px 56px;
   overflow: hidden;
+}
+
+.step-row-head { position: relative; z-index: 1; text-align: center; margin-bottom: 24px; }
+.step-row-eyebrow {
+  display: block;
+  font-size: 34px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
 }
 
 .step-row {
@@ -818,7 +909,7 @@ button { font-family: inherit; cursor: pointer; }
   padding: 10px 20px;
   background: var(--surface-2);
   border-bottom: 1px solid var(--border-light);
-  color: var(--text-tertiary);
+  color: var(--accent-green);
   font-size: 11px;
   font-weight: 700;
   text-transform: uppercase;
@@ -842,6 +933,14 @@ button { font-family: inherit; cursor: pointer; }
 .row-expand-btn[aria-expanded="true"] .chevron { transform: rotate(180deg); }
 
 .detail-row td { padding: 0; border-bottom: 1px solid var(--border); background: rgba(255, 255, 255, 0.02); }
+
+/* ---- Expanded row pair: outline wraps sample-row + detail-row as one block ---- */
+.sample-row.is-expanded td { box-shadow: inset 0 1px 0 0 var(--text-tertiary); }
+.sample-row.is-expanded td:first-child { box-shadow: inset 0 1px 0 0 var(--text-tertiary), inset 1px 0 0 0 var(--text-tertiary); }
+.sample-row.is-expanded td:last-child { box-shadow: inset 0 1px 0 0 var(--text-tertiary), inset -1px 0 0 0 var(--text-tertiary); }
+.detail-row.is-expanded td {
+  box-shadow: inset 1px 0 0 0 var(--text-tertiary), inset -1px 0 0 0 var(--text-tertiary), inset 0 -1px 0 0 var(--text-tertiary);
+}
 .detail-content {
   padding: 16px 20px;
   color: var(--text-secondary);
@@ -1050,16 +1149,26 @@ button { font-family: inherit; cursor: pointer; }
   text-align: center;
 }
 .stat-value {
-  display: flex;
-  align-items: baseline;
-  justify-content: center;
-  gap: 4px;
+  display: block;
+  text-align: center;
   font-size: 40px;
   font-weight: 700;
   letter-spacing: -0.02em;
   color: var(--text-primary);
 }
-.stat-value small { font-size: 28px; font-weight: 600; color: var(--text-tertiary); }
+/* The number alone is centered — the "+" is pulled out of flow so its width
+   doesn't skew centering (a constant-width "+" shifts a short number like
+   "20" much more visibly off-center than a long one like "4000"). */
+.stat-value-num { position: relative; display: inline-block; }
+.stat-value small {
+  position: absolute;
+  left: 100%;
+  bottom: 6px;
+  margin-left: 4px;
+  font-size: 28px;
+  font-weight: 600;
+  color: var(--accent-green);
+}
 .stat-tag {
   display: block;
   margin-top: 14px;
@@ -1117,7 +1226,7 @@ button { font-family: inherit; cursor: pointer; }
   flex-shrink: 0;
 }
 
-.signal-visual { display: flex; flex-direction: column; align-items: center; }
+.signal-visual { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; background: var(--bg); }
 .signal-caption { margin-top: 20px; font-size: 13px; color: var(--text-tertiary); }
 
 /* ---- Source map (circuit-trace diagram) ---- */
@@ -1160,7 +1269,7 @@ button { font-family: inherit; cursor: pointer; }
   border-radius: var(--radius-pill);
   font-size: 13px;
   font-weight: 500;
-  color: var(--text-secondary);
+  color: var(--text-primary);
   max-width: 160px;
   white-space: normal;
   line-height: 1.3;
@@ -1184,7 +1293,7 @@ button { font-family: inherit; cursor: pointer; }
   height: 80px;
   border-radius: 22px;
   background: #050505;
-  border: 1px solid var(--border-light);
+  border: 1px solid var(--text-tertiary);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1326,6 +1435,7 @@ button { font-family: inherit; cursor: pointer; }
   .header-actions .header-cta { display: none; }
   .mobile-menu-trigger { display: flex; }
   .brand-logo { height: 62px; }
+  .hero-badge-trigger { cursor: pointer; }
   .hero-title { font-size: 38px; }
   .booking-section { padding: 140px 0 64px; }
   .booking-embed { height: 640px; }
@@ -1416,6 +1526,19 @@ button { font-family: inherit; cursor: pointer; }
   .sample-table--expandable td:nth-child(3)::before { content: "Scope"; }
   .sample-table--expandable td:nth-child(4)::before { content: "Confidence"; }
 
+  /* Expanded row pair: cards, not table cells, at this width — so the
+     outline belongs on the row elements themselves, not per-td insets. */
+  .sample-row.is-expanded td,
+  .sample-row.is-expanded td:first-child,
+  .sample-row.is-expanded td:last-child,
+  .detail-row.is-expanded td { box-shadow: none; }
+  .sample-table--expandable tr.sample-row.is-expanded {
+    box-shadow: inset 0 1px 0 0 var(--text-tertiary), inset 1px 0 0 0 var(--text-tertiary), inset -1px 0 0 0 var(--text-tertiary);
+    border-bottom-color: transparent;
+  }
+  .sample-table--expandable tr.detail-row.is-expanded {
+    box-shadow: inset 1px 0 0 0 var(--text-tertiary), inset -1px 0 0 0 var(--text-tertiary), inset 0 -1px 0 0 var(--text-tertiary);
+  }
 }
 
 /* ---- Chat answer table: stacked cards instead of cramped columns once
