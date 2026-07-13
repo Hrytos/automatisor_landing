@@ -360,7 +360,7 @@ button { font-family: inherit; cursor: pointer; }
 /* ==========================================================================
    Booking (Cal.com embed)
    ========================================================================== */
-.booking-section { position: relative; z-index: 1; padding: 144px 0 100px; }
+.booking-section { position: relative; z-index: 1; padding: 128px 0 100px; }
 .booking-embed {
   max-width: 1100px;
   height: 780px;
@@ -468,6 +468,7 @@ button { font-family: inherit; cursor: pointer; }
    breakpoint so the desktop hero is never affected. */
 @media (min-width: 961px) {
   .persona-overlay { display: none !important; }
+  .hero-badge-trigger { display: none !important; }
 }
 
 .hero-sub {
@@ -635,7 +636,7 @@ button { font-family: inherit; cursor: pointer; }
   transition: border-color 0.15s ease, transform 0.15s ease;
 }
 .chat-demo-number:hover { transform: translateY(-1px); }
-.chat-demo-number.is-active { border-color: var(--text-primary); }
+.chat-demo-number.is-active { border-color: var(--text-primary); color: var(--text-primary); }
 
 .chat-thread {
   position: relative;
@@ -1023,7 +1024,6 @@ button { font-family: inherit; cursor: pointer; }
 .criteria-row p { font-size: 14px; color: var(--text-secondary); line-height: 1.6; }
 .criteria-row p strong { color: var(--text-primary); font-weight: 600; }
 .criteria-row .pill { flex-shrink: 0; }
-.pill-green { }
 
 /* on dark bg, pills need slightly different bg */
 .criteria-row .pill-green { background: rgba(62,207,142,0.14); color: var(--accent-green); border-color: var(--accent-green-border); }
@@ -1450,7 +1450,7 @@ button { font-family: inherit; cursor: pointer; }
   .brand-logo { height: 62px; }
   .hero-badge-trigger { cursor: pointer; }
   .hero-title { font-size: 38px; }
-  .booking-section { padding: 140px 0 64px; }
+  .booking-section { padding: 128px 0 64px; }
   .booking-embed { height: 640px; }
   .market-panel-head { padding: 40px 24px 32px; }
   .market-panel-dark { padding: 32px 20px 40px; }
