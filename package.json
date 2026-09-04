@@ -5,7 +5,11 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "dev": "node server.js"
+    "dev": "node server.js",
+    "build": "node scripts/build-static.js"
+  },
+  "engines": {
+    "node": ">=18"
   },
   "dependencies": {
     "ejs": "^6.0.1",
