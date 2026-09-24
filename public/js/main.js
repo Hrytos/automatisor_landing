@@ -38,6 +38,27 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
+  // Pricing card: Monthly / Yearly toggle swaps which .pricing-amount-variant
+  // is shown and highlights the matching toggle button.
+  document.querySelectorAll('[data-pricing-toggle]').forEach((toggle) => {
+    const card = toggle.closest('.pricing-card');
+    if (!card) return;
+    const amounts = card.querySelectorAll('[data-pricing-amount] .pricing-amount-variant');
+
+    toggle.querySelectorAll('.pricing-toggle-btn').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const period = btn.dataset.period;
+
+        toggle.querySelectorAll('.pricing-toggle-btn').forEach((b) => {
+          b.classList.toggle('is-active', b === btn);
+        });
+        amounts.forEach((amount) => {
+          amount.hidden = amount.dataset.period !== period;
+        });
+      });
+    });
+  });
+
   // Header "Solutions" dropdown: toggles on click, closes on outside click or Escape.
   document.querySelectorAll('.nav-dropdown').forEach((dropdown) => {
     const trigger = dropdown.querySelector('.nav-dropdown-trigger');
