@@ -7,12 +7,11 @@ const VIEWS = path.join(ROOT, 'views');
 const PUBLIC = path.join(ROOT, 'public');
 const DIST = path.join(ROOT, 'dist');
 
-const PAGES = ['sales', 'success', 'demo'];
-const HOME_PERSONA = process.env.HOME_PERSONA || 'sales';
-
-if (!PAGES.includes(HOME_PERSONA)) {
-  throw new Error(`HOME_PERSONA must be one of: ${PAGES.join(', ')}`);
-}
+// Keep in sync with server.js routes
+const ROUTES = [
+  { view: 'index', out: 'index.html' },
+  { view: 'demo', out: path.join('demo', 'index.html') },
+];
 
 function writeFile(filePath, contents) {
   fs.mkdirSync(path.dirname(filePath), { recursive: true });
@@ -31,14 +30,11 @@ async function main() {
   fs.mkdirSync(DIST, { recursive: true });
   fs.cpSync(PUBLIC, DIST, { recursive: true });
 
-  for (const page of PAGES) {
-    writeFile(path.join(DIST, page, 'index.html'), await renderPage(page));
+  for (const { view, out } of ROUTES) {
+    writeFile(path.join(DIST, out), await renderPage(view));
   }
 
-  // Same destination Express uses for `GET /`
-  writeFile(path.join(DIST, 'index.html'), await renderPage(HOME_PERSONA));
-
-  console.log(`Wrote static site to dist/ (home persona: ${HOME_PERSONA})`);
+  console.log(`Wrote static site to dist/ (${ROUTES.map((r) => r.view).join(', ')})`);
 }
 
 main().catch((err) => {
