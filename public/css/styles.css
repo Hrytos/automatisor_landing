@@ -1202,6 +1202,12 @@ button { font-family: inherit; cursor: pointer; }
 }
 
 /* ==========================================================================
+   Interactive Demo section
+   ========================================================================== */
+.demo-section { position: relative; z-index: 1; padding: 40px 0 90px; }
+.storylane-embed { max-width: 960px; margin: 0 auto; }
+
+/* ==========================================================================
    Signal / Fire a Query section
    ========================================================================== */
 .signal-section { position: relative; z-index: 1; padding: 90px 0; border-top: 1px solid var(--border); }
@@ -1338,7 +1344,7 @@ button { font-family: inherit; cursor: pointer; }
    ========================================================================== */
 .pricing-section { position: relative; z-index: 1; padding: 40px 0 120px; }
 .pricing-card {
-  max-width: 380px;
+  width: 100%;
   margin: 0 auto;
   background: var(--surface);
   border: 1px solid var(--border-light);
@@ -1355,6 +1361,34 @@ button { font-family: inherit; cursor: pointer; }
   color: var(--text-tertiary);
   margin-bottom: 14px;
 }
+.pricing-toggle {
+  display: flex;
+  width: fit-content;
+  align-items: center;
+  gap: 2px;
+  background: var(--surface-2);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-pill);
+  padding: 4px;
+  margin: 12px auto 20px;
+}
+.pricing-toggle-btn {
+  appearance: none;
+  border: none;
+  background: transparent;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  padding: 7px 18px;
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+.pricing-toggle-btn:hover { color: var(--text-primary); }
+.pricing-toggle-btn.is-active { background: var(--accent-green); color: #17171a; }
+.pricing-toggle-btn.is-active:hover { color: #17171a; }
+
 .pricing-amount {
   display: flex;
   align-items: flex-start;
@@ -1363,6 +1397,8 @@ button { font-family: inherit; cursor: pointer; }
   font-weight: 800;
   letter-spacing: -0.02em;
 }
+.pricing-amount-variant { display: flex; align-items: flex-start; }
+.pricing-amount-variant[hidden] { display: none; }
 .pricing-amount .currency { font-size: 24px; margin-top: 8px; }
 .pricing-amount .cents { font-size: 24px; margin-top: 8px; }
 .pricing-amount .period { font-size: 14px; font-weight: 500; color: var(--text-tertiary); align-self: flex-end; margin-left: 6px; margin-bottom: 10px; }
@@ -1376,21 +1412,38 @@ button { font-family: inherit; cursor: pointer; }
 }
 .pricing-features li {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 10px;
   font-size: 14px;
   color: var(--text-secondary);
 }
+.feature-copy { display: flex; flex-direction: column; padding-top: 2px; }
+.feature-title { font-weight: 700; color: var(--text-primary); margin-bottom: 2px; }
+.feature-title-row { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; margin-bottom: 2px; }
+.feature-title-row .feature-title { margin-bottom: 0; }
+.feature-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: var(--radius-pill);
+  font-size: 10.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  white-space: nowrap;
+}
+.feature-tag-addon { background: rgba(255,200,87,0.14); color: #FFC857; border: 1px solid rgba(255,200,87,0.35); }
+.feature-tag-soon { background: var(--accent-green-bg); color: var(--accent-green); border: 1px solid var(--accent-green-border); }
 .pricing-features .check {
   width: 20px; height: 20px;
   border-radius: 50%;
-  background: var(--accent-green-bg);
-  color: var(--accent-green);
+  background: rgba(62, 207, 142, 0.12);
+  color: #3ecf8e;
   display: flex; align-items: center; justify-content: center;
   font-size: 12px;
   flex-shrink: 0;
 }
-.pricing-cta { width: 100%; }
+.pricing-cta { width: 75%; }
 .pricing-note { margin-top: 16px; font-size: 12.5px; color: var(--text-tertiary); }
 
 /* ==========================================================================
