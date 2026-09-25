@@ -122,10 +122,25 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // Hero badge-pill (mobile only): tapping it opens a small overlay with
-  // the two persona cards. Inert on desktop — the trigger's click handler
-  // no-ops above the mobile breakpoint, and the overlay itself is hidden
-  // there via CSS as a second guard.
+  // Mobile nav accordions (Solutions / Product): each trigger button shows
+  // or hides its own sibling panel. Independent of one another — opening
+  // one doesn't close the others.
+  document.querySelectorAll('.mobile-nav-section-trigger').forEach((btn) => {
+    const panel = document.getElementById(btn.getAttribute('aria-controls'));
+    if (!panel) return;
+
+    btn.addEventListener('click', () => {
+      const isOpen = btn.getAttribute('aria-expanded') === 'true';
+      btn.setAttribute('aria-expanded', String(!isOpen));
+      panel.hidden = isOpen;
+    });
+  });
+
+  // Hero badge-pill: tapping it opens a small overlay with the two persona
+  // cards. The trigger itself is hidden via CSS on every breakpoint now
+  // (was mobile-only), so this is effectively dormant — left wired in case
+  // the trigger is reinstated later. The overlay is also hidden via CSS
+  // above the mobile breakpoint as a second guard.
   const isMobileLayout = () => window.matchMedia('(max-width: 960px)').matches;
   const badgeTrigger = document.getElementById('hero-badge-trigger');
   const overlay = document.getElementById('persona-overlay');
@@ -150,24 +165,5 @@ document.addEventListener('DOMContentLoaded', () => {
     window.addEventListener('resize', () => {
       if (!isMobileLayout()) closeOverlay();
     });
-
-    // Shown by default on first load, mobile only — but just once per
-    // session, not on every page (persona links are real navigations, so
-    // without this it would reopen every time the visitor picks one).
-    const AUTO_SHOWN_KEY = 'automatisor:personaOverlayShown';
-    let alreadyAutoShown = true;
-    try {
-      alreadyAutoShown = sessionStorage.getItem(AUTO_SHOWN_KEY) === '1';
-    } catch (e) {
-      // Storage inaccessible (e.g. privacy mode) — fall back to not auto-showing.
-    }
-    if (isMobileLayout() && !alreadyAutoShown) {
-      openOverlay();
-      try {
-        sessionStorage.setItem(AUTO_SHOWN_KEY, '1');
-      } catch (e) {
-        // Ignore — worst case it shows again on the next page.
-      }
-    }
   }
 });

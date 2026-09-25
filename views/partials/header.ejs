@@ -5,11 +5,70 @@
       <img src="/images/logo_light.png" alt="automatisor" class="brand-logo">
     </a>
     <nav class="main-nav">
-      <% if (typeof showProductLink !== 'undefined' && showProductLink) { %>
-      <a href="#product">Product</a>
-      <% } else { %>
-      <!-- <a href="#product">Product</a> -->
-      <% } %>
+      <div class="nav-hover-item">
+        <a href="/" class="nav-hover-trigger">Solutions</a>
+        <div class="nav-hover-panel nav-hover-panel--mega">
+          <div class="nav-panel-col">
+            <span class="nav-panel-col-title">By Industry</span>
+            <ul class="nav-panel-list">
+              <li><a href="/">Robotics OEMs</a></li>
+              <li><a href="/">System Integrators</a></li>
+              <li><a href="/">Software Vendors</a></li>
+              <li><a href="/">Consultants</a></li>
+              <li><a href="/">Service Providers</a></li>
+            </ul>
+          </div>
+          <div class="nav-panel-col">
+            <span class="nav-panel-col-title">By Role</span>
+            <ul class="nav-panel-list">
+              <li><a href="/">Sales Development</a></li>
+              <li><a href="/">Business Development</a></li>
+              <li><a href="/">Lead Generation</a></li>
+              <li><a href="/">Account Based Marketing</a></li>
+            </ul>
+          </div>
+          <div class="nav-panel-col">
+            <span class="nav-panel-col-title">By Size</span>
+            <ul class="nav-panel-list">
+              <li><a href="/">Individuals</a></li>
+              <li><a href="/">Startups</a></li>
+              <li><a href="/">Enterprises</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+       <div class="nav-hover-item">
+        <a href="/" class="nav-hover-trigger">Product</a>
+        <div class="nav-hover-panel nav-hover-panel--mega nav-hover-panel--wide">
+          <div class="nav-panel-col">
+            <span class="nav-panel-col-title">Facility Intelligence</span>
+            <ul class="nav-panel-list">
+              <li><a href="/"><span class="nav-panel-item-title">Account Sense</span><span class="nav-panel-item-desc">Researches and profiles your target accounts into Strategic, Key & Territory</span></a></li>
+              <li><a href="/"><span class="nav-panel-item-title">Facility Sense</span><span class="nav-panel-item-desc">Discovers facilities of your target accounts & uncovers facility level signals of automation need across operations, labor, inventory, infrastructure, regulatory, financials</span></a></li>
+              <li><a href="/"><span class="nav-panel-item-title">People Sense</span><span class="nav-panel-item-desc">Recommends the right people to reach out to. It classifies them on department, seniority and whether they are at a site, regional office or HQ</span></a></li>
+            </ul>
+          </div>
+          <div class="nav-panel-col">
+            <span class="nav-panel-col-title">Prospecting</span>
+            <ul class="nav-panel-list">
+              <li><a href="/"><span class="nav-panel-item-title">Discover</span><span class="nav-panel-item-desc">Finds warehousing facilities to build your funnel</span></a></li>
+              <li><a href="/"><span class="nav-panel-item-title">Qualify</span><span class="nav-panel-item-desc">Matches facilities to your Solutions & Ideal Facility Profiles</span></a></li>
+              <li><a href="/"><span class="nav-panel-item-title">Prospect</span><span class="nav-panel-item-desc">Send highly personalised outreach campaigns; ready-to-send in 10 mins</span></a></li>
+            </ul>
+          </div>
+          <div class="nav-panel-col">
+            <span class="nav-panel-col-title">Pipeline Intelligence</span>
+            <ul class="nav-panel-list">
+              <li><a href="/"><span class="nav-panel-item-title">Ideal Facility Profile</span><span class="nav-panel-item-desc">Defines what a good-fit facility for you looks like & finds them</span></a></li>
+              <li><a href="/"><span class="nav-panel-item-title">Solution Fitment</span><span class="nav-panel-item-desc">Analayses your solutions to recommend good-fits, insert success stories into campaigns & personify brand tone</span></a></li>
+              <li><a href="/"><span class="nav-panel-item-title">Pipeline Desk</span><span class="nav-panel-item-desc">Recommends actions to build your pipeline. Your personal prospecting coach. Always on - 24x7</span></a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="nav-hover-item">
+        <a href="/#pricing" class="nav-hover-trigger">Pricing</a>
+      </div>
     </nav>
     <% if (typeof showHeaderActions === 'undefined' || showHeaderActions) { %>
     <div class="header-actions">
@@ -26,11 +85,59 @@
   <% if (typeof showHeaderActions === 'undefined' || showHeaderActions) { %>
   <div class="mobile-nav" id="mobile-nav" hidden>
     <a href="https://app.automatisor.com/" class="btn btn-light mobile-nav-cta"><%= headerCtaText %></a>
-    <% if (typeof showProductLink !== 'undefined' && showProductLink) { %>
-    <a href="#product" class="mobile-nav-link">
-      <span class="mobile-nav-link-title">Product</span>
+
+    <div class="mobile-nav-section">
+      <button type="button" class="mobile-nav-section-trigger" aria-expanded="false" aria-controls="mobile-nav-solutions">
+        Solutions
+        <svg class="chevron" width="10" height="6" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+      <div class="mobile-nav-section-panel" id="mobile-nav-solutions" hidden>
+        <span class="mobile-nav-group-title">By Industry</span>
+        <a href="/" class="mobile-nav-link"><span class="mobile-nav-link-title">Robotics OEMs</span></a>
+        <a href="/" class="mobile-nav-link"><span class="mobile-nav-link-title">System Integrators</span></a>
+        <a href="/" class="mobile-nav-link"><span class="mobile-nav-link-title">Software Vendors</span></a>
+        <a href="/" class="mobile-nav-link"><span class="mobile-nav-link-title">Consultants</span></a>
+        <a href="/" class="mobile-nav-link"><span class="mobile-nav-link-title">Service Providers</span></a>
+        <span class="mobile-nav-group-title">By Role</span>
+        <a href="/" class="mobile-nav-link"><span class="mobile-nav-link-title">Sales Development</span></a>
+        <a href="/" class="mobile-nav-link"><span class="mobile-nav-link-title">Business Development</span></a>
+        <a href="/" class="mobile-nav-link"><span class="mobile-nav-link-title">Lead Generation</span></a>
+        <a href="/" class="mobile-nav-link"><span class="mobile-nav-link-title">Account Based Marketing</span></a>
+        <span class="mobile-nav-group-title">By Size</span>
+        <a href="/" class="mobile-nav-link"><span class="mobile-nav-link-title">Individuals</span></a>
+        <a href="/" class="mobile-nav-link"><span class="mobile-nav-link-title">Startups</span></a>
+        <a href="/" class="mobile-nav-link"><span class="mobile-nav-link-title">Enterprises</span></a>
+      </div>
+    </div>
+
+    <div class="mobile-nav-section">
+      <button type="button" class="mobile-nav-section-trigger" aria-expanded="false" aria-controls="mobile-nav-product">
+        Product
+        <svg class="chevron" width="10" height="6" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+      <div class="mobile-nav-section-panel" id="mobile-nav-product" hidden>
+        <span class="mobile-nav-group-title">Facility Intelligence</span>
+        <a href="/" class="mobile-nav-link"><span class="mobile-nav-link-title">Account Sense</span><span class="mobile-nav-link-sub">Researches and profiles your target accounts into Strategic, Key & Territory</span></a>
+        <a href="/" class="mobile-nav-link"><span class="mobile-nav-link-title">Facility Sense</span><span class="mobile-nav-link-sub">Discovers facilities of your target accounts & uncovers facility level signals of automation need across operations, labor, inventory, infrastructure, regulatory, financials</span></a>
+        <a href="/" class="mobile-nav-link"><span class="mobile-nav-link-title">People Sense</span><span class="mobile-nav-link-sub">Recommends the right people to reach out to. It classifies them on department, seniority and whether they are at a site, regional office or HQ</span></a>
+        <span class="mobile-nav-group-title">Prospecting</span>
+        <a href="/" class="mobile-nav-link"><span class="mobile-nav-link-title">Discover</span><span class="mobile-nav-link-sub">Finds warehousing facilities to build your funnel</span></a>
+        <a href="/" class="mobile-nav-link"><span class="mobile-nav-link-title">Qualify</span><span class="mobile-nav-link-sub">Matches facilities to your Solutions & Ideal Facility Profiles</span></a>
+        <a href="/" class="mobile-nav-link"><span class="mobile-nav-link-title">Prospect</span><span class="mobile-nav-link-sub">Create highly personalised outreach campaigns. Execute 1:1 ABM campaigns with multivariate messaging strategies within 10 mins. Outreach on Email, Linkedin or calls</span></a>
+        <span class="mobile-nav-group-title">Pipeline Intelligence</span>
+        <a href="/" class="mobile-nav-link"><span class="mobile-nav-link-title">Ideal Facility Profile</span><span class="mobile-nav-link-sub">Defines what a good-fit facility for you looks like & finds them</span></a>
+        <a href="/" class="mobile-nav-link"><span class="mobile-nav-link-title">Solution Fitment</span><span class="mobile-nav-link-sub">Analayses your solutions to recommend good-fits, insert success stories into campaigns & personify brand tone</span></a>
+        <a href="/" class="mobile-nav-link"><span class="mobile-nav-link-title">Pipeline Desk</span><span class="mobile-nav-link-sub">Recommends actions to build your pipeline. Your personal prospecting coach. Always on - 24x7</span></a>
+      </div>
+    </div>
+
+    <a href="/#pricing" class="mobile-nav-link">
+      <span class="mobile-nav-link-title">Pricing</span>
     </a>
-    <% } %>
     <a href="https://app.automatisor.com/auth" class="mobile-nav-link">
       <span class="mobile-nav-link-title">Log in</span>
     </a>
