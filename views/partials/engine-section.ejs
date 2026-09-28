@@ -30,7 +30,7 @@
       <h2><%= engineHeading %></h2>
       <p><%- engineParagraph %></p>
 
-      <a href="<%= engineCtaHref %>" class="btn btn-light"><%= engineCtaText %></a>
+      <a href="<%= engineCtaHref %>" class="btn btn-light<% if (engineCtaText === 'Start Free Trial') { %> btn-cta-trial<% } %>"><%= engineCtaText %></a>
     </div>
   </div>
 </section>
