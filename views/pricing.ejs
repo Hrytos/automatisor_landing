@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Pricing — Automatisor</title>
+<meta name="description" content="Simple, transparent pricing for Automatisor — warehouse intelligence for customer acquisition." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/styles.css" />
+<link rel="icon" href="/images/headerlogo.svg" type="image/svg+xml">
+<%- include('partials/analytics') %>
+</head>
+<body>
+
+<div class="bg-grid" aria-hidden="true"></div>
+
+<%- include('partials/header', { showProductLink: false, headerCtaText: 'Start Free Trial' }) %>
+
+<main>
+
+  <video class="main-bg-video" autoplay muted loop playsinline preload="auto" aria-hidden="true">
+    <source src="/images/herobgvideo.mp4" type="video/mp4">
+  </video>
+  <div class="main-bg-video-overlay" aria-hidden="true"></div>
+
+  <!-- ============ TITLE ============ -->
+  <section class="page-title-section">
+    <div class="container">
+      <div class="section-head">
+        <h1>Simple, transparent pricing that scales with your pipeline</h1>
+        <p>Start free, upgrade when you're ready to scale outreach</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ PRICING ============ -->
+  <section class="pricing-section" id="pricing">
+    <div class="container">
+      <div class="pricing-toggle" data-pricing-toggle>
+        <button type="button" class="pricing-toggle-btn" data-period="monthly">Quarterly</button>
+        <button type="button" class="pricing-toggle-btn is-active" data-period="yearly">Yearly</button>
+      </div>
+      <div class="pricing-cards">
+        <div class="pricing-card">
+          <div class="pricing-card-head">
+            <span class="pricing-plan">Pro</span>
+            <p class="pricing-note">For individuals</p>
+            <div class="pricing-amount" data-pricing-amount>
+              <span class="pricing-amount-prefix">Starts</span>
+              <span class="pricing-amount-variant" data-period="monthly" hidden>$125<span class="period"> per month</span></span>
+              <span class="pricing-amount-variant" data-period="yearly">$100<span class="period"> /month</span></span>
+            </div>
+          </div>
+          <ul class="pricing-features">
+            <li class="pricing-feature-group"><strong>Facility Intelligence</strong></li>
+            <li><span class="check">&check;</span>20 Accounts</li>
+            <li><span class="check">&check;</span>100 Facilities</li>
+            <li class="pricing-feature-group"><strong>Prospecting Copilot</strong></li>
+            <li><span class="check">&check;</span>Basic facility discovery</li>
+            <li><span class="check">&check;</span>Unlimited 1:1 outreach campaigns</li>
+            <li><span class="check">&check;</span>Personalise messaging to each target account</li>
+            <li class="pricing-feature-group"><strong>Pipeline Intelligence</strong></li>
+            <li><span class="check">&check;</span>10 Ideal Facility Profiles</li>
+            <li><span class="check">&check;</span>1 Solution</li>
+            <li><span class="check">&check;</span>Unlimited AI credits</li>
+          </ul>
+          <div class="pricing-card-footer">
+            <a href="https://app.automatisor.com/" class="btn btn-light btn-lg pricing-cta">Start Free Trial</a>
+            <p class="pricing-note">5 warehousing facilities, 14 days</p>
+          </div>
+        </div>
+
+        <div class="pricing-card">
+          <div class="pricing-card-head">
+            <span class="pricing-plan">Teams</span>
+            <p class="pricing-note">For growing teams</p>
+            <p class="pricing-includes">Everything in <strong>Pro</strong> plus</p>
+          </div>
+          <ul class="pricing-features">
+            <li class="pricing-feature-group"><strong>Facility Intelligence</strong></li>
+            <li><span class="check">&check;</span>More Acounts & Facilities</li>
+            <li><span class="check">&check;</span>Recommends right people to reach out to</li>
+            <li class="pricing-feature-group"><strong>Prospecting Copilot</strong></li>
+            <li><span class="check">&check;</span>Advanced facility discovery</li>
+            <li><span class="check">&check;</span>Personalise messaging to Deptartment & Titles</li>
+            <li class="pricing-feature-group"><strong>Pipeline Intelligence</strong></li>
+            <li><span class="check">&check;</span>More Ideal Facility Profiles</li>
+            <li><span class="check">&check;</span>3 Solutions</li>
+            <li><span class="check">&check;</span>Integrations to SmartLead, Instantly, HubSpot & others</li>
+          </ul>
+          <div class="pricing-card-footer">
+            <a href="/demo" class="btn btn-light btn-lg pricing-cta">Talk to us</a>
+          </div>
+        </div>
+
+        <div class="pricing-card">
+          <div class="pricing-card-head">
+            <span class="pricing-plan">Enterprise</span>
+            <p class="pricing-note">For multi-team organizations</p>
+            <p class="pricing-includes">Everything in <strong>Teams</strong> plus</p>
+          </div>
+          <ul class="pricing-features">
+            <li class="pricing-feature-group"><strong>Facility Intelligence</strong></li>
+            <li><span class="check">&check;</span>Unlimited Accounts & Facilites</li>
+            <li><span class="check">&check;</span>Auto-classifies area of influence to faciltiy, regional office or HQ</li>
+            <li class="pricing-feature-group"><strong>Prospecting Copilot</strong></li>
+            <li><span class="check">&check;</span>Unlimited multi & 1:1 campaigns with smart chaining</li>
+            <li><span class="check">&check;</span>Personalise messaging to Cluster, Area of Influence & individual</li>
+            <li class="pricing-feature-group"><strong>Pipeline Intelligence</strong></li>
+            <li><span class="check">&check;</span>Unlimited Ideal Facility Profiles</li>
+            <li><span class="check">&check;</span>Unlimited Solutions</li>
+            <li><span class="check">&check;</span>Custom integrations</li>
+          </ul>
+          <div class="pricing-card-footer">
+            <a href="/demo" class="btn btn-light btn-lg pricing-cta">Talk to us</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ BUILD MY PIPELINE BANNER ============ -->
+  <section class="pipeline-banner-section">
+    <div class="container">
+      <div class="pipeline-banner">
+        <h2>Build my Deal Pipeline for me</h2>
+        <p>Embed our business devleopment experts who specialise in the material handling space into your warehouse acquisition teams</p>
+        <a href="/demo" class="btn btn-light btn-lg">Talk to us</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ TESTIMONIALS ============
+  <section class="testimonials-section">
+    <div class="container">
+      <div class="section-head section-head-center">
+        <div class="tag-pill"><span class="dot"></span>Testimonials</div>
+        <h2>Loved by acquisition teams</h2>
+        <p>Placeholder quotes — swap in real customer testimonials here.</p>
+      </div>
+      <div class="testimonials-grid">
+        <div class="testimonial-card">
+          <p class="testimonial-quote">Automatisor cut our facility research time from hours to minutes. We're prioritising outreach with real signals instead of guesswork.</p>
+          <div class="testimonial-person">
+            <span class="testimonial-avatar">S</span>
+            <div>
+              <div class="testimonial-name">Sarah T.</div>
+              <div class="testimonial-role">VP of Sales, Warehouse Automation Provider</div>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <p class="testimonial-quote">The Ideal Facility Profile scoring lets my team focus only on accounts worth chasing. Win rates are up since we started using it.</p>
+          <div class="testimonial-person">
+            <span class="testimonial-avatar">M</span>
+            <div>
+              <div class="testimonial-name">Marcus L.</div>
+              <div class="testimonial-role">Head of Business Development</div>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <p class="testimonial-quote">Our reps used to spend a full day building account research before outreach. Now it's built in and ready to go.</p>
+          <div class="testimonial-person">
+            <span class="testimonial-avatar">P</span>
+            <div>
+              <div class="testimonial-name">Priya N.</div>
+              <div class="testimonial-role">Director of Revenue Operations</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+-->
+  <!-- ============ FEATURE COMPARISON ============ -->
+  <section class="compare-section">
+    <div class="container">
+      <div class="section-head section-head-center">
+        <div class="tag-pill"><span class="dot"></span>What's Included</div>
+        <h2>Compare Features</h2>
+        <p>Simple, transparent plans that scales with your pipeline</p>
+      </div>
+      <div class="compare-table-wrap">
+        <table class="compare-table">
+          <thead>
+            <tr>
+              <th>Capabilities</th>
+              <th><span class="compare-plan-head"><span class="compare-plan-name">Pro</span><a href="https://app.automatisor.com/" class="btn btn-dark btn-sm">Start Free Trial</a></span></th>
+              <th><span class="compare-plan-head"><span class="compare-plan-name">Teams</span><a href="/demo" class="btn btn-dark btn-sm">Talk to us</a></span></th>
+              <th><span class="compare-plan-head"><span class="compare-plan-name">Enterprise</span><a href="/demo" class="btn btn-dark btn-sm">Talk to us</a></span></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="group-row"><td colspan="4"><span class="group-row-body"><span class="group-row-title-row"><span class="group-row-title">Facility Intelligence</span></span><span class="group-row-desc">Uncover high potential revenue opportunites</span></span></td></tr>
+            <tr><td><span class="compare-feature-cell"><span class="compare-feature-name">Account Sense</span><span class="compare-feature-desc">Researches and profiles target accounts into Strategic, Key & Territory</span></span></td><td><span class="compare-check"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.5 6.3l2.4 2.4 4.6-5.4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span></td><td><span class="compare-check"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.5 6.3l2.4 2.4 4.6-5.4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span></td><td><span class="compare-check"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.5 6.3l2.4 2.4 4.6-5.4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span></td></tr>
+            <tr><td><span class="compare-feature-cell"><span class="compare-feature-name">Facility Sense</span><span class="compare-feature-desc">Discovers facilities of your target accounts & does deep research on them - uncovering facility level signals of automation need across operations, labor, inventory, infrastructure, regulatory, financials. Refreshes periodically to ensure freshness & accuracy</span></span></td><td><span class="compare-check"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.5 6.3l2.4 2.4 4.6-5.4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span></td><td><span class="compare-check"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.5 6.3l2.4 2.4 4.6-5.4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span></td><td><span class="compare-value">Proactively shortlists good-fit facilities using both facility intelligence & intent signals</span></td></tr>
+            <tr><td><span class="compare-feature-cell"><span class="compare-feature-name">People Sense</span><span class="compare-feature-desc">Recommends the right people to reach out to. It classifies them on department, seniority and whether they are at a facility, regional office or HQ</span></span></td><td><span class="compare-cross"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.7 2.7l6.6 6.6M9.3 2.7l-6.6 6.6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span></td><td><span class="compare-check"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.5 6.3l2.4 2.4 4.6-5.4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span></td><td><span class="compare-value">Auto-classifies people to whether they are at a faciltiy, regional office or at HQ</span></td></tr>
+            <tr class="group-row"><td colspan="4"><span class="group-row-body"><span class="group-row-title-row"><span class="group-row-title">Prospecting Copilot</span></span><span class="group-row-desc">Automatically build your deal pipeline</span></span></td></tr>
+            <tr><td><span class="compare-feature-cell"><span class="compare-feature-name">Discover</span><span class="compare-feature-desc">Sources warehousing facilities to build your funnel</span></span></td><td><span class="compare-value">Basic</span></td><td><span class="compare-value">Advanced</span></td><td><span class="compare-value">Advanced</span></td></tr>
+            <tr><td><span class="compare-feature-cell"><span class="compare-feature-name">Qualify</span><span class="compare-feature-desc">Qualifies target facilities against multiple 'Ideal Facility Profiles'. Allows you to find - “Fulfilment sites with each picking operations spanning 200k+ sq.ft and running 2 or more shifts”</span></span></td><td><span class="compare-check"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.5 6.3l2.4 2.4 4.6-5.4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span></td><td><span class="compare-check"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.5 6.3l2.4 2.4 4.6-5.4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span></td><td><span class="compare-value">Add Intent signals to qualification criteria</span></td></tr>
+            <tr><td><span class="compare-feature-cell"><span class="compare-feature-name">Prospect</span><span class="compare-feature-desc">Create highly personalised outreach campaigns. Execute 1:1 ABM campaigns with multivariate messaging strategies within 10 mins. Outreach on Email, Linkedin or calls</span></span></td><td><span class="compare-value">Unlimited 1:1 campaigns.<br><br>Personalize messaging to Account</span></td><td><span class="compare-value">Unlimited 1:1 campaigns.<br><br>Personalize messaging to Account, Dept, Title</span></td><td><span class="compare-value">Unlimited 1:Multiple & 1:1 campaigns with Smart Chaining.<br><br>Personalize messaging to Cluster, Account, Dept, Title, Area of Influence (Facility, Regional office, HQ) & to each individual</span></td></tr>
+            <tr class="group-row"><td colspan="4"><span class="group-row-body"><span class="group-row-title-row"><span class="group-row-title">Pipeline Intelligence</span></span><span class="group-row-desc">Scale deal quality</span></span></td></tr>
+            <tr><td><span class="compare-feature-cell"><span class="compare-feature-name">Ideal Facility Profile</span><span class="compare-feature-desc">Defines what a good-fit facility for you looks like & finds them</span></span></td><td><span class="compare-value">10 Profiles</span></td><td><span class="compare-value">Unlimited</span></td><td><span class="compare-value">Unlimited</span></td></tr>
+            <tr><td><span class="compare-feature-cell"><span class="compare-feature-name">Solution Portfolio</span><span class="compare-feature-desc">Analyses your solutions to recommend good-fits, insert success stories into campaigns & personify brand tone</span></span></td><td><span class="compare-value">1 Solution</span></td><td><span class="compare-value">3 Solutions</span></td><td><span class="compare-value">Unlimited</span></td></tr>
+            <tr><td><span class="compare-feature-cell"><span class="compare-feature-name-row"><span class="compare-feature-name">Pipeline Desk</span><span class="feature-tag feature-tag-soon">Coming Soon</span></span><span class="compare-feature-desc">Recommends actions to build your pipeline. Your personal prospecting coach. Always on - 24x7</span></span></td><td><span class="compare-check"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.5 6.3l2.4 2.4 4.6-5.4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span></td><td><span class="compare-check"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.5 6.3l2.4 2.4 4.6-5.4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span></td><td><span class="compare-check"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.5 6.3l2.4 2.4 4.6-5.4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span></td></tr>
+            <tr><td><span class="compare-feature-cell"><span class="compare-feature-name">AI Credits</span><span class="compare-feature-desc">'Ask Automatisor' any question about your target accounts or facilities and get instant actionable recommendations and deep dives.</span></span></td><td><span class="compare-value">Unlimited</span></td><td><span class="compare-value">Unlimited</span></td><td><span class="compare-value">Unlimited</span></td></tr>
+            <tr class="group-row"><td colspan="4"><span class="group-row-body"><span class="group-row-title-row"><span class="group-row-title">Integrations</span></span><span class="group-row-desc">Extend the power of Automatisor with tools already in your prospecting workflow</span></span></td></tr>
+            <tr><td><span class="compare-feature-cell"><span class="compare-feature-name">CRMs</span></span></td><td><span class="compare-cross"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.7 2.7l6.6 6.6M9.3 2.7l-6.6 6.6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span></td><td><span class="compare-value">HubSpot</span></td><td rowspan="7" class="compare-enterprise-cell"><span class="compare-enterprise-cta"><span class="compare-value">Custom integrations to your existing stack</span><a href="/demo" class="btn btn-dark btn-sm">Talk to us</a></span></td></tr>
+            <tr><td><span class="compare-feature-cell"><span class="compare-feature-name">List building</span></span></td><td><span class="compare-cross"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.7 2.7l6.6 6.6M9.3 2.7l-6.6 6.6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span></td><td><span class="compare-value">Apollo via MCP</span></td></tr>
+            <tr><td><span class="compare-feature-cell"><span class="compare-feature-name">Contact Enrichment</span></span></td><td><span class="compare-cross"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.7 2.7l6.6 6.6M9.3 2.7l-6.6 6.6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span></td><td><span class="compare-value">Apollo, FullEnrich</span></td></tr>
+            <tr><td><span class="compare-feature-cell"><span class="compare-feature-name">Email Delivery</span></span></td><td><span class="compare-value">SmartLead, Instantly</span></td><td><span class="compare-value">SmartLead, Instantly, HubSpot</span></td></tr>
+            <tr><td><span class="compare-feature-cell"><span class="compare-feature-name">Linkedin Outreach</span></span></td><td><span class="compare-cross"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.7 2.7l6.6 6.6M9.3 2.7l-6.6 6.6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span></td><td><span class="compare-value">HeyReach</span></td></tr>
+            <tr><td><span class="compare-feature-cell"><span class="compare-feature-name">Calling</span></span></td><td><span class="compare-cross"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.7 2.7l6.6 6.6M9.3 2.7l-6.6 6.6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span></td><td><span class="compare-value">Gong</span></td></tr>
+            <tr><td><span class="compare-feature-cell"><span class="compare-feature-name">Intent Signals</span><span class="compare-feature-desc">Known champion movement, keyword searches, website visitors, chat conversations, event attendance, engament on marketing material - success stories, white papers, RoI calculators etc</span></span></td><td><span class="compare-cross"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.7 2.7l6.6 6.6M9.3 2.7l-6.6 6.6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span></td><td><span class="compare-cross"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.7 2.7l6.6 6.6M9.3 2.7l-6.6 6.6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FAQ ============ -->
+  <section class="faq-section">
+    <div class="container">
+      <div class="faq-layout">
+        <div class="faq-heading">
+          <h2>Frequently asked questions</h2>
+        </div>
+        <div class="faq-list" data-faq-list>
+        <div class="faq-item">
+          <button type="button" class="faq-question" aria-expanded="false" aria-controls="faq-answer-1">
+            What is Facility Intelligence?
+            <svg class="chevron" width="12" height="7" viewBox="0 0 12 7" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M1 1l5 5 5-5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+          <div class="faq-answer" id="faq-answer-1" hidden>
+             Buying decisions for technically complex solutions like Material handling or warehouse automation rarely originate in the board room. They show up as problems on the warehousing floor much earlier and leave digital breadcrumbs. Automatisor does a deep research on each facility to uncover these breadcrumbs and convert them into insights about its operations, labor, inventory, infrastructure, financial & regulatory aspects. It gathers 200+ unique insights at a facility level from 20+ pre-vetted and validated data sources. It also periodically refreshes it to ensure the right, recent and relevant ground truth is available to you.          </div>
+        </div>
+        <div class="faq-item">
+          <button type="button" class="faq-question" aria-expanded="false" aria-controls="faq-answer-2">
+            What is an Ideal Facility Profile?
+            <svg class="chevron" width="12" height="7" viewBox="0 0 12 7" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M1 1l5 5 5-5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+          <div class="faq-answer" id="faq-answer-2" hidden>
+          An Ideal Facility Profile describes the warehousing facility that has the operational conditions to make it a good fit for your specific products or services. For ex: “Fulfilment sites with each picking operations spanning 200k+ sq.ft and running 2 or more shifts”. It does not describe people unlike the Ideal Customer Profile (ICP). 
+          </div>
+        </div>
+        <div class="faq-item">
+          <button type="button" class="faq-question" aria-expanded="false" aria-controls="faq-answer-3">
+            What counts as a 'chargeable' warehousing facility in the plan?
+            <svg class="chevron" width="12" height="7" viewBox="0 0 12 7" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M1 1l5 5 5-5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+          <div class="faq-answer" id="faq-answer-3" hidden>
+            A facility for which Automatisor can successfully gather Facility Intelligence will be counted as chargeable towards your plan’s limits. If Automatisor fails, you are not charged. Simple.
+          </div>
+        </div>
+        <div class="faq-item">
+          <button type="button" class="faq-question" aria-expanded="false" aria-controls="faq-answer-4">
+            What can I do on the 14-day free trial?
+            <svg class="chevron" width="12" height="7" viewBox="0 0 12 7" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M1 1l5 5 5-5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+          <div class="faq-answer" id="faq-answer-4" hidden>
+            You can discover warehouses that match a criteria and are around a location (eg: Distribution centers near McDonaugh, GA). You can request Automatisor to research them. Automatisor helps you decide whether it would be a good fit for your specific offerings and prepare you to target them. You can then create highly personalised 1:1 outreach campaigns and personalise messaging to the account using facility intelligence. Automatisor gives you a couple of real, fully researched warehousing sites for you to play around with. You can add up to 5 warehousing facilities of your own to start building your deal pipeline.
+          </div>
+        </div>
+        <div class="faq-item">
+          <button type="button" class="faq-question" aria-expanded="false" aria-controls="faq-answer-5">
+            Do you offer custom plans for larger teams?
+            <svg class="chevron" width="12" height="7" viewBox="0 0 12 7" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M1 1l5 5 5-5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+          <div class="faq-answer" id="faq-answer-5" hidden>
+            Yes, we work with organizations having multiple revenue teams - ABM marketing, business development, strategic account manager, account executives and even 3rd party BD teams. We enable comprehensive ABM and outreach motions to boost your lead generation efforts. <a href="/demo">Talk to us</a> to learn more.          </div>
+        </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <%- include('partials/engine-section', {
+    engineHeading: 'Scale warehouse acquisition with Facility Intelligence',
+    engineParagraph: "Which warehouse opportunity do you definitely want to close? <br><br>Identify warehouses worth pursuing, uncover why they are strong automation candidates and prepare for discovery. <br><br> No obligations, no credit card.",
+    engineCtaHref: 'https://app.automatisor.com',
+    engineCtaText: 'Start Free Trial'
+  }) %>
+
+</main>
+
+<%- include('partials/footer') %>
+
+<script src="/js/main.js"></script>
+</body>
+</html>

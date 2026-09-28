@@ -38,12 +38,15 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // Pricing card: Monthly / Yearly toggle swaps which .pricing-amount-variant
-  // is shown and highlights the matching toggle button.
+  // Pricing: Monthly / Yearly toggle swaps which .pricing-amount-variant is
+  // shown and highlights the matching toggle button. The toggle sits outside
+  // the individual pricing cards (one toggle drives every card in the
+  // section), so it's scoped to the whole .pricing-section rather than a
+  // single .pricing-card. Cards without a toggle-driven price (e.g. "Custom
+  // pricing" cards) simply have no [data-pricing-amount] to match.
   document.querySelectorAll('[data-pricing-toggle]').forEach((toggle) => {
-    const card = toggle.closest('.pricing-card');
-    if (!card) return;
-    const amounts = card.querySelectorAll('[data-pricing-amount] .pricing-amount-variant');
+    const scope = toggle.closest('.pricing-section') || document;
+    const amounts = scope.querySelectorAll('[data-pricing-amount] .pricing-amount-variant');
 
     toggle.querySelectorAll('.pricing-toggle-btn').forEach((btn) => {
       btn.addEventListener('click', () => {
@@ -126,6 +129,19 @@ document.addEventListener('DOMContentLoaded', () => {
   // or hides its own sibling panel. Independent of one another — opening
   // one doesn't close the others.
   document.querySelectorAll('.mobile-nav-section-trigger').forEach((btn) => {
+    const panel = document.getElementById(btn.getAttribute('aria-controls'));
+    if (!panel) return;
+
+    btn.addEventListener('click', () => {
+      const isOpen = btn.getAttribute('aria-expanded') === 'true';
+      btn.setAttribute('aria-expanded', String(!isOpen));
+      panel.hidden = isOpen;
+    });
+  });
+
+  // FAQ accordions: each question shows/hides its own answer. Independent
+  // of one another — opening one doesn't close the others.
+  document.querySelectorAll('.faq-question').forEach((btn) => {
     const panel = document.getElementById(btn.getAttribute('aria-controls'));
     if (!panel) return;
 

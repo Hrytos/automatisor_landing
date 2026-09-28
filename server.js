@@ -17,6 +17,10 @@ app.get('/demo', (req, res) => {
   res.render('demo');
 });
 
+app.get('/pricing', (req, res) => {
+  res.render('pricing');
+});
+
 app.listen(PORT, () => {
   console.log(`Server running at http://localhost:${PORT}`);
 });
