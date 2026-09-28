@@ -11,6 +11,7 @@ const DIST = path.join(ROOT, 'dist');
 const ROUTES = [
   { view: 'index', out: 'index.html' },
   { view: 'demo', out: path.join('demo', 'index.html') },
+  { view: 'pricing', out: path.join('pricing', 'index.html') },
 ];
 
 function writeFile(filePath, contents) {
