@@ -1435,8 +1435,7 @@ button { font-family: inherit; cursor: pointer; }
   letter-spacing: 0.08em;
   text-align: center;
   color: #fff;
-  background: #CC0066;
-  border: 1px solid #CC0066;
+  background: linear-gradient(to right, var(--brand-orange), #CC0066);
   margin: -40px -40px 24px;
   padding: 20px 40px;
   border-radius: var(--radius-lg) var(--radius-lg) 0 0;
