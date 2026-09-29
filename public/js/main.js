@@ -139,16 +139,30 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // FAQ accordions: each question shows/hides its own answer. Independent
-  // of one another — opening one doesn't close the others.
-  document.querySelectorAll('.faq-question').forEach((btn) => {
-    const panel = document.getElementById(btn.getAttribute('aria-controls'));
-    if (!panel) return;
+  // FAQ accordions: only one question per list may be open at a time —
+  // opening one closes whichever else was open.
+  document.querySelectorAll('[data-faq-list]').forEach((list) => {
+    const closers = [];
 
-    btn.addEventListener('click', () => {
-      const isOpen = btn.getAttribute('aria-expanded') === 'true';
-      btn.setAttribute('aria-expanded', String(!isOpen));
-      panel.hidden = isOpen;
+    list.querySelectorAll('.faq-question').forEach((btn) => {
+      const panel = document.getElementById(btn.getAttribute('aria-controls'));
+      if (!panel) return;
+
+      const close = () => {
+        btn.setAttribute('aria-expanded', 'false');
+        panel.hidden = true;
+      };
+      const open = () => {
+        closers.forEach((otherClose) => { if (otherClose !== close) otherClose(); });
+        btn.setAttribute('aria-expanded', 'true');
+        panel.hidden = false;
+      };
+      closers.push(close);
+
+      btn.addEventListener('click', () => {
+        const isOpen = btn.getAttribute('aria-expanded') === 'true';
+        isOpen ? close() : open();
+      });
     });
   });
 
