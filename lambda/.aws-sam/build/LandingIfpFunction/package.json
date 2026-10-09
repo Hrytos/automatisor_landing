@@ -1,0 +1,20 @@
+{
+  "name": "landing-page",
+  "version": "1.0.0",
+  "description": "Node.js web app replicating a SaaS landing page design",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "build": "node scripts/build-static.js",
+    "test:ifp": "node scripts/test-ifp-session.js",
+    "deploy:ifp": "node scripts/deploy-ifp-lambda.mjs"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "ejs": "^6.0.1",
+    "express": "^4.19.2"
+  }
+}

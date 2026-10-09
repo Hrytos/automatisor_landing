@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>IFP flow test</title>
+<link rel="stylesheet" href="/css/ifp-test.css" />
+</head>
+<body>
+<main class="wrap">
+  <header class="top">
+    <div>
+      <p class="eyebrow">Test harness</p>
+      <h1>IFP flow</h1>
+      <p class="lede">Company, solution, fit, recommended profiles, clarifying questions, then the final segments. Nothing is saved as an account.</p>
+    </div>
+    <button type="button" id="reset" class="ghost">Start over</button>
+  </header>
+
+  <p id="status" class="status" hidden></p>
+  <p id="error" class="error" hidden></p>
+
+  <section id="company" class="card"></section>
+  <section id="offerings" class="card" hidden></section>
+  <section id="fit" class="card" hidden></section>
+  <section id="segments" class="card" hidden></section>
+  <section id="questions" class="card" hidden></section>
+  <section id="final" class="card" hidden></section>
+
+  <details class="raw">
+    <summary>Session dict</summary>
+    <pre id="raw"></pre>
+  </details>
+</main>
+<script src="/js/ifp-config.js"></script>
+<script src="/js/ifp-test.js"></script>
+</body>
+</html>
