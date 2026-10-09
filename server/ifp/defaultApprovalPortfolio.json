@@ -1,0 +1,16 @@
+{
+  "accounts": [
+    {
+      "accountId": "e68c4248-ee65-48e2-ac20-221aefd5bd1a",
+      "siteIds": [
+        "779ae75c-49d5-4845-b011-6f8f24293d39",
+        "fd1a7e7b-fa3c-4fa6-ad04-885e5c4e93e1",
+        "46ebb90f-107f-4f25-be2b-de19de45aa49"
+      ]
+    },
+    {
+      "accountId": "a44a399c-e27f-48ab-b47f-d3dfb09637a6",
+      "siteIds": ["a6eeddb5-2dfa-4587-a98b-e8e6a89040b1"]
+    }
+  ]
+}

@@ -1,0 +1,77 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: Landing IFP flow. Separate from the product OpenAI proxy. Calls OpenAI directly.
+
+Parameters:
+  OpenAIApiKey:
+    Type: String
+    NoEcho: true
+    Description: OpenAI API key used only by this function
+  OpenAIModel:
+    Type: String
+    Default: gpt-5.6-luna
+  SupabaseUrl:
+    Type: String
+    Description: Used only to read the default account research for ambiguity context
+  SupabaseAnonKey:
+    Type: String
+    NoEcho: true
+  AllowedOrigin:
+    Type: String
+    Default: '*'
+    Description: Amplify origin, or * . Comma-separated for more than one.
+
+Globals:
+  Function:
+    Timeout: 180
+    MemorySize: 512
+    Runtime: nodejs22.x
+    Architectures:
+      - arm64
+
+Resources:
+  LandingIfpFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: lambda/ifp/index.handler
+      CodeUri: ..
+      Description: IFP company, offerings, fit, segments, questions, and finalize
+      Environment:
+        Variables:
+          OPENAI_API_KEY: !Ref OpenAIApiKey
+          OPENAI_MODEL: !Ref OpenAIModel
+          SUPABASE_URL: !Ref SupabaseUrl
+          SUPABASE_ANON_KEY: !Ref SupabaseAnonKey
+
+  LandingIfpFunctionUrl:
+    Type: AWS::Lambda::Url
+    Properties:
+      TargetFunctionArn: !GetAtt LandingIfpFunction.Arn
+      AuthType: NONE
+      Cors:
+        AllowOrigins: !Split [',', !Ref AllowedOrigin]
+        AllowMethods:
+          - POST
+        AllowHeaders:
+          - content-type
+        MaxAge: 86400
+
+  LandingIfpFunctionUrlPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !Ref LandingIfpFunction
+      Action: lambda:InvokeFunctionUrl
+      Principal: '*'
+      FunctionUrlAuthType: NONE
+
+  LandingIfpFunctionInvokePermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !Ref LandingIfpFunction
+      Action: lambda:InvokeFunction
+      Principal: '*'
+
+Outputs:
+  LandingIfpUrl:
+    Description: Function URL. Set public/js/ifp-config.js IFP_API_BASE to this value with no trailing slash.
+    Value: !GetAtt LandingIfpFunctionUrl.FunctionUrl
