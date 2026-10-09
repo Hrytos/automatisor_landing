@@ -21,6 +21,10 @@ app.get('/pricing', (req, res) => {
   res.render('pricing');
 });
 
+app.get('/ideal-facility-profile', (req, res) => {
+  res.render('ideal-facility-profile');
+});
+
 app.listen(PORT, () => {
   console.log(`Server running at http://localhost:${PORT}`);
 });
