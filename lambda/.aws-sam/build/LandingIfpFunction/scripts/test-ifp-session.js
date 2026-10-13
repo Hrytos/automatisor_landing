@@ -182,6 +182,10 @@ global.fetch = async (url, options = {}) => {
     })))
   }
 
+  if (href.endsWith('/rest/v1/landing_page_ifp') && options.method === 'POST') {
+    return jsonResponse(201, {})
+  }
+
   throw new Error(`Unexpected URL ${href}`)
 }
 
@@ -190,8 +194,6 @@ const {
   findOfferings,
   selectOffering,
   buildFit,
-  recommendSegments,
-  buildQuestions,
   submitAnswers,
   finalizeSegments,
   runIfpStep,
@@ -223,13 +225,10 @@ async function main() {
   assert.equal(switched.segments.length, 0)
   assert.equal(session.fit.name, 'Widget')
 
-  session = await recommendSegments(session)
-  assert.equal(session.stage, 'segments')
+  session = (await runIfpStep('segments', { session })).session
+  assert.equal(session.stage, 'questions')
   assert.equal(session.segments.length, 2)
   assert.deepEqual(session.segments.map((row) => row.axis), ['operation', 'scale'])
-
-  session = await buildQuestions(session)
-  assert.equal(session.stage, 'questions')
   assert.equal(session.questions.length, 1)
   assert.equal(session.questions[0].segmentRank, 1)
   assert.equal(session.questions[0].options.at(-1).freeText, true)
@@ -294,6 +293,14 @@ async function main() {
   assert.equal(denied.statusCode, 404)
   const preflight = await handler({ requestContext: { http: { method: 'OPTIONS' } }, rawPath: '/company' })
   assert.equal(preflight.statusCode, 204)
+
+  await assert.rejects(() => runIfpStep('lead', { domain: 'acme.com', email: 'ada@gmail.com' }), /work email/)
+  const beforeLead = calls.length
+  const saved = await runIfpStep('lead', { domain: 'https://www.acme.com/about', email: 'Ada@acme.com' })
+  assert.deepEqual(saved, { ok: true })
+  const leadCall = calls.slice(beforeLead).find((call) => call.href.endsWith('/rest/v1/landing_page_ifp'))
+  assert.equal(leadCall.body.domain, 'acme.com')
+  assert.equal(leadCall.body.email, 'ada@acme.com')
 
   console.log('ifp session ok')
 }

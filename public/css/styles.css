@@ -1514,13 +1514,16 @@ button { font-family: inherit; cursor: pointer; }
 .ifp-solution-desc[hidden] { display: none; }
 .ifp-solution-desc textarea {
   width: 100%;
-  resize: vertical;
+  field-sizing: content;
+  resize: none;
+  overflow: hidden;
   background: #fff;
   border: 1px solid var(--light-panel-border);
   border-radius: var(--radius-sm);
   padding: 10px 12px;
   font-family: inherit;
   font-size: 13px;
+  line-height: 1.5;
   color: var(--light-panel-text-sub);
 }
 .ifp-solution-desc textarea:focus { outline: none; border-color: var(--brand-orange); }
@@ -1554,17 +1557,45 @@ button { font-family: inherit; cursor: pointer; }
 .ifp-fit-col--good .ifp-fit-example-marker { background: #3ecf8e; }
 .ifp-fit-col--bad .ifp-fit-example-marker { background: var(--accent-red); }
 .ifp-fit-example textarea {
+  flex: 1;
   width: 100%;
+  field-sizing: content;
   resize: none;
+  overflow: hidden;
   background: transparent;
-  border: none;
-  padding: 0;
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  padding: 4px 8px;
   font-family: inherit;
   font-size: 13.5px;
   line-height: 1.5;
   color: var(--light-panel-text-sub);
 }
+.ifp-fit-example:not(.is-editing) { cursor: text; }
+.ifp-fit-example textarea[readonly] { cursor: text; pointer-events: none; }
+.ifp-fit-example.is-editing textarea {
+  background: #fff;
+  border-color: var(--brand-orange);
+  color: var(--light-panel-text);
+  pointer-events: auto;
+}
 .ifp-fit-example textarea:focus { outline: none; color: var(--light-panel-text); }
+.ifp-fit-add {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: 1px solid var(--light-panel-border);
+  border-radius: 8px;
+  color: var(--light-panel-text-sub);
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  align-self: flex-start;
+  padding: 6px 10px;
+}
+.ifp-fit-add:hover { border-color: var(--light-panel-text-sub); color: var(--light-panel-text); background: var(--light-panel-2); }
 
 /* ---- transition screen (between step 3 and step 4, not a numbered step) ---- */
 .ifp-transition {
@@ -1666,6 +1697,8 @@ button { font-family: inherit; cursor: pointer; }
 .ifp-q-option:hover { background: var(--light-panel-2); }
 .ifp-q-option input[type="radio"] { accent-color: var(--brand-orange); width: 15px; height: 15px; flex-shrink: 0; }
 .ifp-q-option:has(input:checked) { color: var(--light-panel-text); font-weight: 600; }
+.ifp-q-free { margin: 4px 10px 8px 35px; width: calc(100% - 45px); }
+.ifp-q-free[hidden] { display: none; }
 
 /* ---- step 5: blur-until-email reveal ---- */
 .ifp-reveal-wrap { position: relative; flex: 1; }

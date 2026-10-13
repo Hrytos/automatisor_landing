@@ -9,7 +9,7 @@ The prompts are copies of the product prompts in `ABM_POC`. They live in this re
 ## Flow
 
 ```
-company → offerings → select an offering → fit → segments → questions → answers → final
+company → offerings → select an offering → fit → segments + questions → answers → final
 ```
 
 | Step | What it does | Prompt | Lambda route |
@@ -17,9 +17,9 @@ company → offerings → select an offering → fit → segments → questions 
 | Company | Store the vendor name and domain | none | none |
 | Solution finder | Search the vendor site for offerings | `server/ifp/prompts/find-offerings.md` | `POST /openai/responses` with `web_search` (max 8 searches) |
 | Select offering | Record which offering to profile | none | none |
-| Good fit and bad fit | One call returns both lists | `server/ifp/prompts/fit-profile.md` | `POST /openai/responses` with `web_search` (max 6 searches) |
-| Recommend IFPs | Up to 3 segments | `server/ifp/prompts/icp-recommendations.md` | `POST /openai/chat` |
-| Questioner | One ambiguity pass per segment | `server/ifp/prompts/ambiguity.md` | `POST /openai/chat` |
+| Good fit and bad fit | One call returns both lists (at most 5 lines each after normalization) | `server/ifp/prompts/fit-profile.md` | `POST /openai/responses` with `web_search` (max 6 searches) |
+| Recommend IFPs | Up to 3 segments, then the questioner runs on all of them (in parallel). No profile-picker screen. | `server/ifp/prompts/icp-recommendations.md` | `POST /openai/chat` |
+| Questioner | One ambiguity pass per recommended segment. `POST /api/ifp/segments` does this immediately after recommending. | `server/ifp/prompts/ambiguity.md` | `POST /openai/chat` |
 | Final segments | Fold answers into each criteria | `server/ifp/prompts/synthesize.md` | `POST /openai/chat` |
 
 Product source for the same prompts:
@@ -39,7 +39,7 @@ Out of scope, on purpose:
 
 ## The session dict
 
-Every step takes this object and returns the next one. The input object is not mutated. Nothing in it is written to Supabase or a portfolio.
+Every step takes this object and returns the next one. The input object is not mutated. During a visit the browser keeps the session in `sessionStorage`. After each IFP API step the server **updates `landing_ifp_master`** (one row per domain): `offerings` and `fits[offering]` sync from the session; on **`finalize` only** it **appends** to per-offering logs in **`questioner`** (readable Q + options + selected, grouped by segment name — no criteria) and **`final_segments`** (criteria and assumptions per profile), linked by shared `run_id`. **`landing_page_ifp`** is insert-only for `{ domain, email }` on reveal (`domain` FK → master). Only **offerings** and **fits[solution]** are read for cache.
 
 Created by `createIfpSession()` in `server/ifp/session.js`:
 
@@ -206,9 +206,11 @@ Requires a fit profile that has good-fit or bad-fit text. Fills `icp-recommendat
 - `GOOD_FIT`, `BAD_FIT`
 - `PROOF_POINTS` from the selected offering
 
-Chat Completions, JSON object, no web search. The landing prompt asks for 5 segments; the code keeps at most 5. Stage becomes `segments`.
+Chat Completions, JSON object, no web search. The landing prompt asks for 3 segments; the code keeps at most 3.
 
-HTTP: `POST /api/ifp/segments`.
+HTTP: `POST /api/ifp/segments` recommends those profiles and then runs the questioner on every one of them (parallel ambiguity calls). The response stage is `questions`. Callers do not choose a subset, and there is no screen for that choice. `recommendSegments()` by itself still stops at stage `segments` so the two model steps can be tested apart. `POST /api/ifp/questions` still runs the questioner when `segments` is already filled.
+
+On the marketing page (`/ideal-facility-profile`), step 3→4 shows the existing transition animation while `POST /api/ifp/demo-sites` and `POST /api/ifp/segments` run in parallel. `demo-sites` returns every demo portfolio site from Supabase (account name and address), with no session change. After step 4, `POST /api/ifp/answers` runs without the full-panel loader; only `POST /api/ifp/finalize` shows the loading screen.
 
 ### 6. Questioner
 
@@ -276,13 +278,13 @@ Failure:
 { "error": "Pick an offering first." }
 ```
 
-Unknown step names return HTTP 404. Other thrown errors return HTTP 400. The step names are `company`, `offerings`, `select`, `fit`, `segments`, `questions`, `answers`, `finalize`.
+Unknown step names return HTTP 404. Other thrown errors return HTTP 400. The step names are `company`, `offerings`, `select`, `fit`, `segments`, `questions`, `answers`, `finalize`, plus `demo-sites` (returns `{ sites: [{ accountName, address }] }`) and `lead` (work-email capture).
 
 The server does not store the session. The caller sends the last session back on the next request.
 
 ## Landing Lambda
 
-Production is the static Amplify site plus a separate function, `lambda/template.yaml`. That function does not call the product OpenAI proxy and does not check a Supabase user. `OPENAI_API_KEY` lives in the function environment. The handler in `lambda/ifp/index.js` only runs the eight IFP steps, so a caller cannot send their own prompt.
+Production is the static Amplify site plus a separate function, `lambda/template.yaml`. That function does not call the product OpenAI proxy and does not check a Supabase user. `OPENAI_API_KEY` lives in the function environment. The handler in `lambda/ifp/index.js` runs the IFP steps (including `demo-sites` and `lead`), so a caller cannot send their own prompt.
 
 ```bash
 npm run deploy:ifp -- --allowed-origin "https://www.automatisor.com"

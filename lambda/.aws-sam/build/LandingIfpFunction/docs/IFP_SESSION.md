@@ -9,7 +9,7 @@ The prompts are copies of the product prompts in `ABM_POC`. They live in this re
 ## Flow
 
 ```
-company → offerings → select an offering → fit → segments → questions → answers → final
+company → offerings → select an offering → fit → segments + questions → answers → final
 ```
 
 | Step | What it does | Prompt | Lambda route |
@@ -18,8 +18,8 @@ company → offerings → select an offering → fit → segments → questions 
 | Solution finder | Search the vendor site for offerings | `server/ifp/prompts/find-offerings.md` | `POST /openai/responses` with `web_search` (max 8 searches) |
 | Select offering | Record which offering to profile | none | none |
 | Good fit and bad fit | One call returns both lists | `server/ifp/prompts/fit-profile.md` | `POST /openai/responses` with `web_search` (max 6 searches) |
-| Recommend IFPs | Up to 3 segments | `server/ifp/prompts/icp-recommendations.md` | `POST /openai/chat` |
-| Questioner | One ambiguity pass per segment | `server/ifp/prompts/ambiguity.md` | `POST /openai/chat` |
+| Recommend IFPs | Up to 5 segments, then the questioner runs on all of them. No profile-picker screen. | `server/ifp/prompts/icp-recommendations.md` | `POST /openai/chat` |
+| Questioner | One ambiguity pass per recommended segment. `POST /api/ifp/segments` does this immediately after recommending. | `server/ifp/prompts/ambiguity.md` | `POST /openai/chat` |
 | Final segments | Fold answers into each criteria | `server/ifp/prompts/synthesize.md` | `POST /openai/chat` |
 
 Product source for the same prompts:
@@ -206,9 +206,9 @@ Requires a fit profile that has good-fit or bad-fit text. Fills `icp-recommendat
 - `GOOD_FIT`, `BAD_FIT`
 - `PROOF_POINTS` from the selected offering
 
-Chat Completions, JSON object, no web search. Stage becomes `segments`.
+Chat Completions, JSON object, no web search. The landing prompt asks for 5 segments; the code keeps at most 5.
 
-HTTP: `POST /api/ifp/segments`.
+HTTP: `POST /api/ifp/segments` recommends those profiles and then runs the questioner on every one of them. The response stage is `questions`. Callers do not choose a subset, and there is no screen for that choice. `recommendSegments()` by itself still stops at stage `segments` so the two model steps can be tested apart. `POST /api/ifp/questions` still runs the questioner when `segments` is already filled.
 
 ### 6. Questioner
 

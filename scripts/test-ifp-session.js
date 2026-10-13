@@ -8,6 +8,8 @@ process.env.SUPABASE_PASSWORD = 'secret'
 process.env.OPENAI_MODEL = 'gpt-5.6-luna'
 
 const calls = []
+/** @type {Record<string, Record<string, unknown>>} */
+const ifpMasterByDomain = {}
 
 function jsonResponse(status, payload) {
   return {
@@ -15,6 +17,9 @@ function jsonResponse(status, payload) {
     status,
     async text() {
       return JSON.stringify(payload)
+    },
+    async json() {
+      return payload
     },
   }
 }
@@ -182,6 +187,32 @@ global.fetch = async (url, options = {}) => {
     })))
   }
 
+  if (href.includes('/rest/v1/landing_page_ifp') && options.method === 'POST') {
+    return jsonResponse(201, {})
+  }
+
+  if (href.includes('/rest/v1/landing_ifp_master')) {
+    const method = options.method || 'GET'
+    const domainMatch = href.match(/domain=eq\.([^&]+)/)
+    const domain = domainMatch ? decodeURIComponent(domainMatch[1]) : body?.domain
+    if (method === 'GET') {
+      const row = domain ? ifpMasterByDomain[domain] : null
+      return jsonResponse(200, row ? [row] : [])
+    }
+    if (method === 'PATCH' && domain) {
+      ifpMasterByDomain[domain] = { ...ifpMasterByDomain[domain], ...body, domain }
+      return jsonResponse(204, null)
+    }
+    if (method === 'POST' && body?.domain) {
+      ifpMasterByDomain[body.domain] = {
+        fits: {},
+        ...ifpMasterByDomain[body.domain],
+        ...body,
+      }
+      return jsonResponse(201, null)
+    }
+  }
+
   throw new Error(`Unexpected URL ${href}`)
 }
 
@@ -190,8 +221,6 @@ const {
   findOfferings,
   selectOffering,
   buildFit,
-  recommendSegments,
-  buildQuestions,
   submitAnswers,
   finalizeSegments,
   runIfpStep,
@@ -223,13 +252,10 @@ async function main() {
   assert.equal(switched.segments.length, 0)
   assert.equal(session.fit.name, 'Widget')
 
-  session = await recommendSegments(session)
-  assert.equal(session.stage, 'segments')
+  session = (await runIfpStep('segments', { session })).session
+  assert.equal(session.stage, 'questions')
   assert.equal(session.segments.length, 2)
   assert.deepEqual(session.segments.map((row) => row.axis), ['operation', 'scale'])
-
-  session = await buildQuestions(session)
-  assert.equal(session.stage, 'questions')
   assert.equal(session.questions.length, 1)
   assert.equal(session.questions[0].segmentRank, 1)
   assert.equal(session.questions[0].options.at(-1).freeText, true)
@@ -294,6 +320,55 @@ async function main() {
   assert.equal(denied.statusCode, 404)
   const preflight = await handler({ requestContext: { http: { method: 'OPTIONS' } }, rawPath: '/company' })
   assert.equal(preflight.statusCode, 204)
+
+  await assert.rejects(() => runIfpStep('lead', { domain: 'acme.com', email: 'ada@gmail.com' }), /work email/)
+  const beforeLead = calls.length
+  const saved = await runIfpStep('lead', {
+    domain: 'https://www.acme.com/about',
+    email: 'Ada@acme.com',
+    session,
+  })
+  assert.deepEqual(saved, { ok: true })
+  const leadCall = calls.slice(beforeLead).find((call) => call.href.endsWith('/rest/v1/landing_page_ifp'))
+  assert.equal(leadCall.body.domain, 'acme.com')
+  assert.equal(leadCall.body.email, 'ada@acme.com')
+  assert.equal(Object.keys(leadCall.body).sort().join(','), 'domain,email')
+
+  const cachedOffering = {
+    name: 'Cached',
+    description: 'From DB',
+    source_url: 'https://acme.com/cached',
+    kind: 'software',
+    confidence: 'High',
+    why: 'cache',
+    citations: [],
+    proof_points: [],
+  }
+  ifpMasterByDomain['acme.com'] = { domain: 'acme.com', offerings: [cachedOffering], fits: {} }
+  const beforeCachedOfferings = calls.length
+  let cacheSession = (await runIfpStep('company', { name: 'Acme', domain: 'acme.com' })).session
+  const cachedOfferings = await runIfpStep('offerings', { session: cacheSession })
+  assert.equal(cachedOfferings.fromCache?.offerings, true)
+  assert.equal(cachedOfferings.session.offerings[0].name, 'Cached')
+  const responseCalls = calls.slice(beforeCachedOfferings).filter((call) => call.href.includes('/openai/responses'))
+  assert.equal(responseCalls.length, 0)
+
+  const {
+    buildQuestionerRunEntry,
+    buildFinalSegmentsRunEntry,
+    isLegacyFlatQuestioner,
+  } = require('../server/ifp/masterLogs')
+  const meta = { runId: 'run-test', completedAt: '2026-01-01T00:00:00.000Z', offeringLabel: 'Widget' }
+  const qLog = buildQuestionerRunEntry(session, meta)
+  assert.equal(qLog.offering_label, 'Widget')
+  assert.equal(qLog.segments[0].name, 'Manual jack sites')
+  assert.equal(qLog.segments[0].questions[0].selected, 'One pallet at a time')
+  assert.ok(qLog.segments[0].questions[0].options.length >= 2)
+  assert.equal(JSON.stringify(qLog).includes('criteria'), false)
+  const fLog = buildFinalSegmentsRunEntry(session, meta)
+  assert.match(fLog.profiles[0].criteria, /manual pallet jack/)
+  assert.equal(fLog.run_id, qLog.run_id)
+  assert.equal(isLegacyFlatQuestioner({ segments: [], questions: [] }), true)
 
   console.log('ifp session ok')
 }

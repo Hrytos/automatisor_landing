@@ -28,7 +28,8 @@ const synthesizePrompt = loadPrompt('synthesize.md')
 
 const LINE_SOURCE = new Set(['published', 'derived'])
 const AXES = new Set(['operation', 'scale', 'trigger', 'vertical', 'workflow'])
-const MAX_ICP_SEGMENTS = 5
+const MAX_ICP_SEGMENTS = 3
+const MAX_FIT_LINES = 5
 const FREE_TEXT_OPTION = { label: 'Something else — type your own answer', freeText: true }
 
 function normalizeOffering(offering) {
@@ -160,8 +161,8 @@ async function buildFit(session) {
   })
 
   const { data } = await responses(prompt, { schema: FIT_SCHEMA, maxSearches: 6, retries: 1 })
-  const goodFit = normalizeCriteria(data?.goodFit)
-  const badFit = normalizeCriteria(data?.badFit)
+  const goodFit = normalizeCriteria(data?.goodFit).slice(0, MAX_FIT_LINES)
+  const badFit = normalizeCriteria(data?.badFit).slice(0, MAX_FIT_LINES)
   if (!goodFit.length && !badFit.length) {
     throw new Error(cleanOfferingText(data?.note) || 'No fit lines returned')
   }
@@ -217,8 +218,7 @@ async function buildQuestions(session) {
   if (!next.segments?.length) throw new Error('Recommend ideal facility profiles first.')
 
   const corpus = await getDefaultCorpus()
-  const questions = []
-  for (const segment of next.segments) {
+  const checks = await Promise.all(next.segments.map(async (segment) => {
     const prompt = fillPrompt(ambiguityPrompt, {
       CRITERIA: segment.criteria,
       CORPUS: corpus.text,
@@ -227,8 +227,9 @@ async function buildQuestions(session) {
     })
     const raw = await chatJson(prompt)
     const rows = normalizeQuestions(raw, segment.rank)
-    if (raw?.ambiguous === true) questions.push(...rows)
-  }
+    return raw?.ambiguous === true ? rows : []
+  }))
+  const questions = checks.flat()
 
   next.questions = questions
   next.answers = []

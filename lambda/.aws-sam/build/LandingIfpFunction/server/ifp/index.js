@@ -1,18 +1,29 @@
 const session = require('./session')
 const steps = require('./run')
+const { saveLead } = require('./leads')
 
 const STEP_HANDLERS = {
   company: (body) => steps.setCompany(body.session, { name: body.name, domain: body.domain }),
   offerings: (body) => steps.findOfferings(body.session),
   select: (body) => steps.selectOffering(body.session, body.name),
   fit: (body) => steps.buildFit(body.session),
-  segments: (body) => steps.recommendSegments(body.session),
+  // Recommend profiles, then question every one of them. Callers do not
+  // pick a subset, and there is no pause on the segments stage.
+  segments: async (body) => {
+    const recommended = await steps.recommendSegments(body.session)
+    return steps.buildQuestions(recommended)
+  },
   questions: (body) => steps.buildQuestions(body.session),
   answers: (body) => steps.submitAnswers(body.session, body.answers),
   finalize: (body) => steps.finalizeSegments(body.session),
 }
 
 async function runIfpStep(step, body = {}) {
+  if (step === 'lead') {
+    await saveLead(body)
+    return { ok: true }
+  }
+
   const handler = STEP_HANDLERS[step]
   if (!handler) {
     const err = new Error(`Unknown IFP step "${step}".`)

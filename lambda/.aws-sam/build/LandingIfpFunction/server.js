@@ -28,6 +28,10 @@ app.get('/pricing', (req, res) => {
   res.render('pricing');
 });
 
+app.get('/ideal-facility-profile', (req, res) => {
+  res.render('ideal-facility-profile');
+});
+
 app.get('/ifp-test', (req, res) => {
   res.render('ifp-test');
 });

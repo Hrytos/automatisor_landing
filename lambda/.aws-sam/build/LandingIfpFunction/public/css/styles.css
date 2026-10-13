@@ -122,6 +122,7 @@ button { font-family: inherit; cursor: pointer; }
   white-space: nowrap;
 }
 .btn:hover { transform: translateY(-1px); }
+.btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
 .btn-sm { padding: 8px 16px; font-size: 13px; }
 .btn-lg { padding: 13px 26px; font-size: 15px; }
 
@@ -1401,6 +1402,339 @@ button { font-family: inherit; cursor: pointer; }
 .engine-copy p { color: var(--text-secondary); font-size: 15px; margin-bottom: 24px; }
 
 /* ==========================================================================
+   Ideal Facility Profile — hero (2-column, left-aligned copy)
+   ========================================================================== */
+.ifp-hero { position: relative; z-index: 1; padding: 156px 0 100px; }
+.ifp-hero-inner {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 56px;
+  align-items: center;
+}
+.ifp-hero-copy h1 {
+  font-size: 46px;
+  line-height: 1.15;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  margin: 16px 0 16px;
+}
+.ifp-hero-copy p { color: var(--text-secondary); font-size: 17px; max-width: 520px; }
+.ifp-hero-actions { justify-content: flex-start; margin-top: 32px; }
+.ifp-hero-visual { display: flex; flex-direction: column; gap: 12px; }
+
+/* ==========================================================================
+   Ideal Facility Profile — "build your IFP" interactive tool
+   ========================================================================== */
+.ifp-tool-section { position: relative; z-index: 1; padding: 40px 0 100px; }
+.ifp-tool {
+  width: 100%;
+  min-height: 600px;
+  margin: 0 auto;
+  background: #fff;
+  color: var(--light-panel-text);
+  border: 1px solid var(--light-panel-border);
+  border-radius: var(--radius-lg);
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ---- step indicator ---- */
+.ifp-tool-steps { display: flex; align-items: center; justify-content: center; margin-bottom: 36px; }
+.ifp-step-dot {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  border: 1px solid var(--light-panel-border);
+  color: var(--light-panel-text-sub);
+  font-size: 13px;
+  font-weight: 600;
+  flex-shrink: 0;
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+.ifp-step-dot.is-active { background: var(--brand-orange); border-color: var(--brand-orange); color: #fff; }
+.ifp-step-dot.is-done { background: var(--accent-green-bg); border-color: var(--accent-green-border); color: var(--brand-orange); }
+.ifp-step-line { width: 32px; height: 1px; background: var(--light-panel-border); flex-shrink: 0; }
+
+/* ---- step panels ---- */
+.ifp-step { flex: 1; display: flex; flex-direction: column; }
+.ifp-step[hidden] { display: none; }
+.ifp-step-title { font-size: 22px; font-weight: 700; letter-spacing: -0.01em; }
+.ifp-step-title strong { color: var(--brand-orange); }
+.ifp-step-sub { margin-top: 8px; color: var(--light-panel-text-sub); font-size: 14px; }
+.ifp-step-actions { display: flex; justify-content: space-between; margin-top: auto; padding-top: 28px; }
+
+.ifp-input {
+  width: 100%;
+  background: var(--light-panel-2);
+  border: 1px solid var(--light-panel-border);
+  border-radius: var(--radius-sm);
+  padding: 12px 16px;
+  font-size: 14px;
+  font-family: inherit;
+  color: var(--light-panel-text);
+}
+.ifp-input::placeholder { color: var(--light-panel-text-sub); }
+.ifp-input:focus { outline: none; border-color: var(--brand-orange); }
+.ifp-website-form,
+.ifp-email-form { display: flex; gap: 10px; margin-top: 24px; flex-wrap: wrap; }
+.ifp-website-form .ifp-input,
+.ifp-email-form .ifp-input { flex: 1; min-width: 180px; }
+
+/* ---- step 2: solution cards ---- */
+.ifp-solution-list { display: flex; flex-direction: column; gap: 10px; margin-top: 24px; }
+.ifp-solution-card {
+  border: 1px solid var(--light-panel-border);
+  border-radius: var(--radius-md);
+  background: #fff;
+  transition: border-color 0.15s ease;
+}
+.ifp-solution-card.is-selected { border-color: var(--brand-orange); }
+.ifp-solution-head { display: flex; align-items: center; justify-content: space-between; padding: 14px 16px; }
+.ifp-solution-select { display: flex; align-items: center; gap: 12px; cursor: pointer; flex: 1; }
+.ifp-solution-select input[type="radio"] { accent-color: var(--brand-orange); width: 16px; height: 16px; flex-shrink: 0; }
+.ifp-solution-name { font-size: 14.5px; font-weight: 600; color: var(--light-panel-text); }
+.ifp-solution-expand {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px; height: 28px;
+  border-radius: 8px;
+  background: none;
+  border: 1px solid var(--light-panel-border);
+  color: var(--light-panel-text-sub);
+  flex-shrink: 0;
+  cursor: pointer;
+}
+.ifp-solution-expand .chevron { transition: transform 0.2s ease; }
+.ifp-solution-expand[aria-expanded="true"] .chevron { transform: rotate(180deg); }
+.ifp-solution-desc { padding: 0 16px 16px; }
+.ifp-solution-desc[hidden] { display: none; }
+.ifp-solution-desc textarea {
+  width: 100%;
+  field-sizing: content;
+  resize: none;
+  overflow: hidden;
+  background: #fff;
+  border: 1px solid var(--light-panel-border);
+  border-radius: var(--radius-sm);
+  padding: 10px 12px;
+  font-family: inherit;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--light-panel-text-sub);
+}
+.ifp-solution-desc textarea:focus { outline: none; border-color: var(--brand-orange); }
+
+/* ---- step 3: good-fit / bad-fit example columns (editable) ---- */
+.ifp-fit-columns { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 24px; }
+.ifp-fit-col { display: flex; flex-direction: column; gap: 10px; }
+.ifp-fit-col-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--light-panel-text-sub);
+}
+.ifp-fit-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.ifp-fit-dot--good { background: #3ecf8e; }
+.ifp-fit-dot--bad { background: var(--accent-red); }
+.ifp-fit-example-list { display: flex; flex-direction: column; }
+.ifp-fit-example {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--light-panel-border);
+}
+.ifp-fit-example:last-child { border-bottom: none; }
+.ifp-fit-example-marker { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; margin-top: 7px; }
+.ifp-fit-col--good .ifp-fit-example-marker { background: #3ecf8e; }
+.ifp-fit-col--bad .ifp-fit-example-marker { background: var(--accent-red); }
+.ifp-fit-example textarea {
+  flex: 1;
+  width: 100%;
+  field-sizing: content;
+  resize: none;
+  overflow: hidden;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  padding: 4px 8px;
+  font-family: inherit;
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: var(--light-panel-text-sub);
+}
+.ifp-fit-example textarea[readonly] { cursor: default; }
+.ifp-fit-example.is-editing textarea {
+  background: #fff;
+  border-color: var(--brand-orange);
+  color: var(--light-panel-text);
+}
+.ifp-fit-example textarea:focus { outline: none; color: var(--light-panel-text); }
+.ifp-fit-edit,
+.ifp-fit-add {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: 1px solid var(--light-panel-border);
+  border-radius: 8px;
+  color: var(--light-panel-text-sub);
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.ifp-fit-edit {
+  width: 28px;
+  height: 28px;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.ifp-fit-edit:hover,
+.ifp-fit-add:hover { border-color: var(--light-panel-text-sub); color: var(--light-panel-text); background: var(--light-panel-2); }
+.ifp-fit-add { align-self: flex-start; padding: 6px 10px; }
+
+/* ---- transition screen (between step 3 and step 4, not a numbered step) ---- */
+.ifp-transition {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 20px;
+  padding: 20px 0;
+}
+.ifp-transition[hidden] { display: none; }
+.ifp-transition-spinner {
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  border: 3px solid var(--light-panel-border);
+  border-top-color: var(--brand-orange);
+  animation: ifp-spin 0.8s linear infinite;
+}
+@keyframes ifp-spin { to { transform: rotate(360deg); } }
+.ifp-transition-text { max-width: 420px; font-size: 15px; color: var(--light-panel-text-sub); }
+.ifp-transition-text strong { color: var(--light-panel-text); }
+.ifp-transition-facilities { display: flex; flex-direction: column; gap: 10px; width: 100%; max-width: 420px; }
+.ifp-transition-facility {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  border: 1px solid var(--light-panel-border);
+  border-radius: var(--radius-md);
+  background: var(--light-panel-2);
+  text-align: left;
+}
+.ifp-transition-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  background: #fff;
+  border: 1px solid var(--light-panel-border);
+  color: var(--light-panel-text-sub);
+  flex-shrink: 0;
+}
+.ifp-transition-facility-info { display: flex; flex-direction: column; gap: 1px; }
+.ifp-transition-facility-name { font-size: 13.5px; font-weight: 700; color: var(--light-panel-text); }
+.ifp-transition-facility-address { font-size: 12px; color: var(--light-panel-text-sub); }
+
+/* ---- step 5: IFP list, reused .check styling from pricing-features ---- */
+.ifp-list { display: flex; flex-direction: column; gap: 12px; margin: 24px 0; }
+.ifp-list li { display: flex; align-items: flex-start; gap: 10px; font-size: 14px; color: var(--light-panel-text-sub); }
+.ifp-list .check {
+  width: 20px; height: 20px;
+  border-radius: 50%;
+  background: rgba(62, 207, 142, 0.12);
+  color: #3ecf8e;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+/* ---- step 4: up to 5 clarifying questions, accordion (one open at a time) ---- */
+.ifp-q-list { margin-top: 24px; }
+.ifp-q-item { border-bottom: 1px solid var(--light-panel-border); }
+.ifp-q-item:first-child { border-top: 1px solid var(--light-panel-border); }
+.ifp-q-question {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  width: 100%;
+  background: none;
+  border: none;
+  padding: 16px 4px;
+  font-family: inherit;
+  font-size: 14.5px;
+  font-weight: 600;
+  color: var(--light-panel-text);
+  text-align: left;
+  cursor: pointer;
+}
+.ifp-q-item.is-answered .ifp-q-question { color: var(--brand-orange); }
+.ifp-q-question .chevron { transition: transform 0.2s ease; color: var(--light-panel-text-sub); flex-shrink: 0; }
+.ifp-q-question[aria-expanded="true"] .chevron { transform: rotate(180deg); }
+.ifp-q-options { display: flex; flex-direction: column; gap: 2px; padding: 0 4px 18px; }
+.ifp-q-options[hidden] { display: none; }
+.ifp-q-option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  color: var(--light-panel-text-sub);
+  cursor: pointer;
+}
+.ifp-q-option:hover { background: var(--light-panel-2); }
+.ifp-q-option input[type="radio"] { accent-color: var(--brand-orange); width: 15px; height: 15px; flex-shrink: 0; }
+.ifp-q-option:has(input:checked) { color: var(--light-panel-text); font-weight: 600; }
+.ifp-q-free { margin: 4px 10px 8px 35px; width: calc(100% - 45px); }
+.ifp-q-free[hidden] { display: none; }
+
+/* ---- step 5: blur-until-email reveal ---- */
+.ifp-reveal-wrap { position: relative; flex: 1; }
+.ifp-list-blurred { filter: blur(4px); user-select: none; pointer-events: none; }
+.ifp-list-blurred li { color: var(--light-panel-text); }
+.ifp-reveal-gate {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: var(--radius-md);
+  padding: 24px;
+}
+.ifp-reveal-gate p { font-size: 14.5px; font-weight: 600; color: var(--light-panel-text); }
+.ifp-reveal-wrap.is-revealed .ifp-reveal-gate { display: none; }
+
+/* ---- buttons on this white panel need the dark-fill / dark-text variants
+   already established for .pricing-card, same reasoning: .btn-light and
+   .btn-outline's default colors assume a dark page background. ---- */
+.ifp-tool .btn-light { background: var(--light-panel-text); color: #fff; }
+.ifp-tool .btn-light:hover { background: #000; }
+.ifp-tool .btn-outline { border-color: var(--light-panel-border); color: var(--light-panel-text); }
+.ifp-tool .btn-outline:hover { border-color: var(--light-panel-text-sub); background: var(--light-panel-2); }
+
+/* ==========================================================================
    Pricing
    ========================================================================== */
 .pricing-section { position: relative; z-index: 1; padding: 40px 0 120px; }
@@ -1845,6 +2179,10 @@ button { font-family: inherit; cursor: pointer; }
   .brief-layout { grid-template-columns: 1fr; }
   .brief-aside { position: static; }
   .signal-inner, .engine-inner { grid-template-columns: 1fr; }
+  .ifp-hero { padding: 128px 0 64px; }
+  .ifp-hero-inner { grid-template-columns: 1fr; gap: 40px; }
+  .ifp-fit-columns { grid-template-columns: 1fr; }
+  .ifp-hero-copy h1 { font-size: 34px; }
   .source-map {
     grid-template-columns: 1fr auto;
     grid-template-areas:

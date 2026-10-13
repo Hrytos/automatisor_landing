@@ -12,6 +12,7 @@ const ROUTES = [
   { view: 'index', out: 'index.html' },
   { view: 'demo', out: path.join('demo', 'index.html') },
   { view: 'pricing', out: path.join('pricing', 'index.html') },
+  { view: 'ideal-facility-profile', out: path.join('ideal-facility-profile', 'index.html') },
 ];
 
 function writeFile(filePath, contents) {

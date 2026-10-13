@@ -1,72 +1,139 @@
 // "Build your Ideal Facility Profile" tool — views/ideal-facility-profile.ejs.
 //
-// This is UI only. Every decision point marked "API DECISION" below is where
-// a real backend call belongs in production — which solutions a domain maps
-// to, which good-fit/bad-fit examples and final Ideal Facility Profiles to
-// generate, and whether a clarifying question is needed (and what it should
-// ask). All of that is mocked here with static data so the front end can be
-// built and reviewed independently of that service.
+// The markup and steps stay as designed. Data comes from /api/ifp (or
+// window.IFP_API_BASE). Choosing Ideal Facility Profiles is not a screen:
+// POST /segments recommends them and runs the questioner on all of them,
+// while the existing transition stays up. The next visible step is questions.
 
 document.addEventListener('DOMContentLoaded', () => {
   const tool = document.querySelector('[data-ifp-tool]');
   if (!tool) return;
 
-  // ---- Mock data (stands in for the backend's responses) ----------------
-  const SOLUTIONS = [
-    {
-      name: 'Automated Storage & Retrieval (AS/RS)',
-      description: 'High-density robotic storage and retrieval systems for pallet and case-level inventory.',
-    },
-    {
-      name: 'Conveyor & Sortation Systems',
-      description: 'Automated material flow and parcel/case sortation across receiving, picking and shipping.',
-    },
-    {
-      name: 'Robotic Piece Picking',
-      description: 'Vision-guided robotic arms for SKU-level picking in fulfillment operations.',
-    },
-    {
-      name: 'Warehouse Execution Software',
-      description: 'Orchestration layer that coordinates automation, labor and inventory in real time.',
-    },
-  ];
+  const MAX_FIT_LINES = 5;
+  const STORAGE_KEY = 'automatisor-ifp';
 
-  const PROFILES = [
-    'Multi-shift fulfillment centers (200k+ sq ft) with picking throughput above 1,000 units/hour',
-    'Cross-dock distribution centers running 2+ shifts with dedicated returns processing',
-    '3PL-operated facilities with multi-tenant WMS integration and client-facing portals',
-    'Facilities with active job postings for automation technicians or robotics operators',
-    'Sites reporting labor strain signals — high overtime, elevated turnover, or chronic understaffing',
-  ];
+  let session = null;
+  let offerings = [];
+  let questions = [];
+  let selectedSolutionName = '';
 
-  const GOOD_FIT_EXAMPLES = [
-    'Multi-shift fulfillment center (200k+ sq ft) with picking throughput above 1,000 units/hour',
-    'Cross-dock distribution center running 2+ shifts with a dedicated returns processing bay',
-    '3PL-operated facility with multi-tenant WMS integration and client-facing portals',
-  ];
+  function apiBase() {
+    const configured = String(window.IFP_API_BASE || '').trim().replace(/\/$/, '');
+    const host = window.location.hostname;
+    if (!configured || host === 'localhost' || host === '127.0.0.1') return '/api/ifp';
+    return configured;
+  }
 
-  const BAD_FIT_EXAMPLES = [
-    'Single-shift facility under 50k sq.ft with no automation signals',
-    'Last-mile delivery hub with no case-level picking operations',
-    'Facility with no active job postings or recent hiring signals, indicating stagnant operations',
-  ];
+  async function post(step, extra) {
+    const res = await fetch(`${apiBase()}/${step}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ session, ...extra }),
+    });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) throw new Error(data.error || `Request failed (${res.status})`);
+    if (data.session) {
+      session = data.session;
+      persistLocal();
+    }
+    return data;
+  }
 
-  // API DECISION: which questions (if any — up to 5) are worth asking, and
-  // what their options should be, is decided by the backend per-session.
-  // Fixed here so the accordion UI can be built independently of that.
-  const CLARIFY_QUESTIONS = [
-    { text: 'Does your solution require dock-high loading doors?', options: ['Yes', 'No', 'Not sure'] },
-    { text: "What's the minimum facility size your solution needs?", options: ['Under 50k sq ft', '50k–150k sq ft', '150k–300k sq ft', '300k+ sq ft'] },
-    { text: 'Does your solution require multi-shift operations?', options: ['Yes, 2+ shifts', 'Single shift is fine', 'Not sure'] },
-    { text: 'Is dedicated client/customer signage on-site a signal you care about?', options: ['Yes', 'No', 'Not sure'] },
-    { text: 'Should we prioritize facilities with recent automation-related job postings?', options: ['Yes, strongly', 'Somewhat', 'No preference'] },
-  ];
+  function persistLocal() {
+    if (!session) return;
+    try {
+      sessionStorage.setItem(STORAGE_KEY, JSON.stringify({
+        session,
+        selectedSolutionName,
+        website: websiteInput?.value?.trim() || '',
+      }));
+    } catch {
+      /* quota or private mode */
+    }
+  }
+
+  function clearLocal() {
+    try {
+      sessionStorage.removeItem(STORAGE_KEY);
+    } catch {
+      /* ignore */
+    }
+  }
+
+  function restoreLocal() {
+    try {
+      const raw = sessionStorage.getItem(STORAGE_KEY);
+      if (!raw) return;
+      const saved = JSON.parse(raw);
+      if (!saved?.session?.company?.domain) return;
+      session = saved.session;
+      selectedSolutionName = saved.selectedSolutionName || session.selectedOffering?.name || '';
+      offerings = session.offerings || [];
+      questions = session.questions || [];
+      if (saved.website && websiteInput) websiteInput.value = saved.website;
+      if (domainLabel) domainLabel.textContent = saved.website || session.company.domain;
+      const stage = session.stage || 'company';
+      if (stage === 'company' || !offerings.length) return;
+      renderSolutions();
+      if (selectedSolutionName) {
+        const radio = solutionList.querySelector(`input[value="${CSS.escape(selectedSolutionName)}"]`);
+        if (radio) {
+          radio.checked = true;
+          radio.closest('.ifp-solution-card')?.classList.add('is-selected');
+          nextFrom2.disabled = false;
+        }
+      }
+      if (stage === 'offerings') goToStep(2);
+      else if (stage === 'fit') {
+        const fit = session.fit || {};
+        renderFitExamples(tool.querySelector('[data-ifp-good-fit-list]'), (fit.goodFit || []).map((r) => r.line || r));
+        renderFitExamples(tool.querySelector('[data-ifp-bad-fit-list]'), (fit.badFit || []).map((r) => r.line || r));
+        const solutionLabel = tool.querySelector('[data-ifp-solution-label]');
+        if (solutionLabel) solutionLabel.textContent = selectedSolutionName || 'your solution';
+        goToStep(3);
+      } else if (stage === 'questions') {
+        renderQuestions();
+        goToStep(4);
+      } else if (stage === 'final') {
+        const lines = (session.finalSegments || []).map((segment) => segment.criteria || segment.name);
+        renderList(tool.querySelector('[data-ifp-final-list]'), lines);
+        goToStep(5);
+      }
+    } catch {
+      clearLocal();
+    }
+  }
+
+  async function fetchDemoSites() {
+    const data = await post('demo-sites', {});
+    return data.sites || [];
+  }
+
+  function fail(err) {
+    window.alert(err.message || 'Something went wrong. Try again.');
+  }
 
   // ---- Step navigation ----------------------------------------------------
   const steps = tool.querySelectorAll('[data-ifp-step]');
   const stepDots = tool.querySelectorAll('[data-step-dot]');
 
+  const loading = tool.querySelector('[data-ifp-loading]');
+  const loadingText = tool.querySelector('[data-ifp-loading-text]');
+  const transition = tool.querySelector('[data-ifp-transition]');
+
+  function showLoading(message) {
+    steps.forEach((step) => { step.hidden = true; step.classList.remove('is-active'); });
+    if (transition) transition.hidden = true;
+    loadingText.textContent = message;
+    loading.hidden = false;
+  }
+
+  function hideLoading() {
+    loading.hidden = true;
+  }
+
   function goToStep(n) {
+    hideLoading();
     steps.forEach((step) => {
       const isTarget = step.dataset.ifpStep === String(n);
       step.hidden = !isTarget;
@@ -88,29 +155,47 @@ document.addEventListener('DOMContentLoaded', () => {
   const websiteInput = tool.querySelector('[data-ifp-website-input]');
   const domainLabel = tool.querySelector('[data-ifp-domain-label]');
   const solutionList = tool.querySelector('[data-ifp-solution-list]');
+  const websiteButton = websiteForm.querySelector('button[type="submit"]');
 
-  websiteForm.addEventListener('submit', (e) => {
+  websiteForm.addEventListener('submit', async (e) => {
     e.preventDefault();
-    const domain = websiteInput.value.trim() || 'your website';
+    const domain = websiteInput.value.trim();
+    if (!domain) return;
     if (domainLabel) domainLabel.textContent = domain;
-
-    // API DECISION: which solutions does this domain actually offer? Mocked
-    // with a fixed list (max 4) here — swap renderSolutions() to use the
-    // backend's response once it exists.
-    renderSolutions();
-    goToStep(2);
+    websiteButton.disabled = true;
+    const label = domain.replace(/^https?:\/\//i, '').replace(/\/$/, '');
+    showLoading(`Looking up ${label}…`);
+    try {
+      await post('company', { name: '', domain });
+      const offeringsResult = await post('offerings', {});
+      if (offeringsResult.fromCache?.offerings) {
+        loadingText.textContent = `Loaded saved solutions for ${label}…`;
+      } else {
+        loadingText.textContent = `Finding solutions on ${label}…`;
+      }
+      offerings = session.offerings || [];
+      renderSolutions();
+      hideLoading();
+      goToStep(2);
+    } catch (err) {
+      hideLoading();
+      goToStep(1);
+      fail(err);
+    } finally {
+      websiteButton.disabled = false;
+    }
   });
 
   function renderSolutions() {
     solutionList.innerHTML = '';
-    SOLUTIONS.forEach((solution, index) => {
+    offerings.forEach((solution) => {
       const card = document.createElement('div');
       card.className = 'ifp-solution-card';
       card.innerHTML = `
         <div class="ifp-solution-head">
           <label class="ifp-solution-select">
-            <input type="radio" name="ifp-solution" value="${index}">
-            <span class="ifp-solution-name">${solution.name}</span>
+            <input type="radio" name="ifp-solution" value="">
+            <span class="ifp-solution-name"></span>
           </label>
           <button type="button" class="ifp-solution-expand" aria-expanded="false">
             <svg class="chevron" width="12" height="7" viewBox="0 0 12 7" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -119,15 +204,20 @@ document.addEventListener('DOMContentLoaded', () => {
           </button>
         </div>
         <div class="ifp-solution-desc" hidden>
-          <textarea rows="2">${solution.description}</textarea>
+          <textarea rows="1"></textarea>
         </div>
       `;
+      card.querySelector('input').value = solution.name;
+      card.querySelector('.ifp-solution-name').textContent = solution.name;
+      const description = card.querySelector('textarea');
+      description.value = solution.description || '';
+      description.addEventListener('input', () => fitTextarea(description));
       solutionList.appendChild(card);
     });
+    nextFrom2.disabled = true;
   }
 
   const nextFrom2 = tool.querySelector('[data-ifp-next-from-2]');
-  let selectedSolutionName = '';
 
   solutionList.addEventListener('click', (e) => {
     const expandBtn = e.target.closest('.ifp-solution-expand');
@@ -137,6 +227,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const isOpen = expandBtn.getAttribute('aria-expanded') === 'true';
       expandBtn.setAttribute('aria-expanded', String(!isOpen));
       desc.hidden = isOpen;
+      if (!desc.hidden) fitTextarea(desc.querySelector('textarea'));
     }
   });
 
@@ -145,79 +236,249 @@ document.addEventListener('DOMContentLoaded', () => {
     tool.querySelectorAll('.ifp-solution-card').forEach((card) => card.classList.remove('is-selected'));
     const card = e.target.closest('.ifp-solution-card');
     card.classList.add('is-selected');
-    selectedSolutionName = SOLUTIONS[Number(e.target.value)].name;
+    selectedSolutionName = e.target.value;
     nextFrom2.disabled = false;
   });
 
-  nextFrom2.addEventListener('click', () => {
+  nextFrom2.addEventListener('click', async () => {
     const solutionLabel = tool.querySelector('[data-ifp-solution-label]');
     if (solutionLabel) solutionLabel.textContent = selectedSolutionName || 'your solution';
 
-    // API DECISION: the good-fit/bad-fit example facilities for the selected
-    // solution. Mocked with fixed lists here — "Continue" on this step is
-    // what used to be a separate "run against sample facilities" action, so
-    // this is where that call would actually fire in production.
-    renderFitExamples(tool.querySelector('[data-ifp-good-fit-list]'), GOOD_FIT_EXAMPLES);
-    renderFitExamples(tool.querySelector('[data-ifp-bad-fit-list]'), BAD_FIT_EXAMPLES);
-    goToStep(3);
+    const card = tool.querySelector('.ifp-solution-card.is-selected');
+    const edited = card?.querySelector('textarea')?.value.trim() || '';
+    const offering = (session.offerings || []).find((row) => row.name === selectedSolutionName);
+    if (offering && edited) offering.description = edited;
+
+    nextFrom2.disabled = true;
+    showLoading('Building good-fit and bad-fit examples…');
+    try {
+      await post('select', { name: selectedSolutionName });
+      const fitResult = await post('fit', {});
+      if (fitResult.fromCache?.fit) {
+        loadingText.textContent = 'Loaded saved fit examples…';
+      }
+      const fit = session.fit || {};
+      renderFitExamples(
+        tool.querySelector('[data-ifp-good-fit-list]'),
+        (fit.goodFit || []).map((row) => row.line),
+      );
+      renderFitExamples(
+        tool.querySelector('[data-ifp-bad-fit-list]'),
+        (fit.badFit || []).map((row) => row.line),
+      );
+      goToStep(3);
+      tool.querySelectorAll('[data-ifp-good-fit-list] textarea, [data-ifp-bad-fit-list] textarea')
+        .forEach(fitTextarea);
+      updateFitAddButtons();
+    } catch (err) {
+      hideLoading();
+      goToStep(2);
+      fail(err);
+    } finally {
+      nextFrom2.disabled = false;
+    }
   });
 
   function renderList(listEl, items) {
-    listEl.innerHTML = items.map((text) => `<li><span class="check">&check;</span>${text}</li>`).join('');
+    listEl.innerHTML = items.map((text) => `<li><span class="check">&check;</span></li>`).join('');
+    listEl.querySelectorAll('li').forEach((li, index) => {
+      li.append(document.createTextNode(items[index]));
+    });
   }
 
   function renderFitExamples(listEl, items) {
-    listEl.innerHTML = items.map((text) => `
-      <div class="ifp-fit-example">
-        <span class="ifp-fit-example-marker"></span>
-        <textarea rows="2">${text}</textarea>
-      </div>
-    `).join('');
+    listEl.innerHTML = '';
+    items.slice(0, MAX_FIT_LINES).forEach((text) => appendFitExample(listEl, text, false));
+    updateFitAddButtons();
   }
 
-  // ---- Step 3: good-fit / bad-fit examples ---------------------------------
-  const transition = tool.querySelector('[data-ifp-transition]');
+  function updateFitAddButtons() {
+    tool.querySelectorAll('[data-ifp-add-fit]').forEach((button) => {
+      const list = button.dataset.ifpAddFit === 'good'
+        ? tool.querySelector('[data-ifp-good-fit-list]')
+        : tool.querySelector('[data-ifp-bad-fit-list]');
+      button.disabled = list.querySelectorAll('.ifp-fit-example').length >= MAX_FIT_LINES;
+    });
+  }
+
+  function appendFitExample(listEl, text, editing) {
+    const row = document.createElement('div');
+    row.className = 'ifp-fit-example';
+    row.innerHTML = `
+      <span class="ifp-fit-example-marker"></span>
+      <textarea rows="1" aria-label="Fit example"></textarea>
+    `;
+    const field = row.querySelector('textarea');
+    field.value = text || '';
+    field.readOnly = !editing;
+    field.addEventListener('input', () => fitTextarea(field));
+    field.addEventListener('blur', () => finishFitEdit(row));
+    row.addEventListener('click', () => {
+      if (row.classList.contains('is-editing')) return;
+      startFitEdit(row);
+    });
+    listEl.appendChild(row);
+    if (editing) startFitEdit(row);
+    else fitTextarea(field);
+    return row;
+  }
+
+  function startFitEdit(row) {
+    const field = row.querySelector('textarea');
+    row.classList.add('is-editing');
+    field.readOnly = false;
+    field.focus();
+    fitTextarea(field);
+  }
+
+  function finishFitEdit(row) {
+    const field = row.querySelector('textarea');
+    if (!field.value.trim()) {
+      row.remove();
+      updateFitAddButtons();
+      return;
+    }
+    row.classList.remove('is-editing');
+    field.readOnly = true;
+  }
+
+  tool.querySelectorAll('[data-ifp-add-fit]').forEach((button) => {
+    button.addEventListener('click', () => {
+      const list = button.dataset.ifpAddFit === 'good'
+        ? tool.querySelector('[data-ifp-good-fit-list]')
+        : tool.querySelector('[data-ifp-bad-fit-list]');
+      if (list.querySelectorAll('.ifp-fit-example').length >= MAX_FIT_LINES) return;
+      appendFitExample(list, '', true);
+      updateFitAddButtons();
+    });
+  });
+
+  function fitTextarea(field) {
+    if (!field) return;
+    field.style.height = 'auto';
+    field.style.height = `${field.scrollHeight}px`;
+  }
+
+  function applyFitEdits() {
+    if (!session?.fit) return;
+    const read = (selector) => [...tool.querySelectorAll(`${selector} textarea`)]
+      .map((field) => field.value.trim())
+      .filter(Boolean);
+    const good = read('[data-ifp-good-fit-list]').slice(0, MAX_FIT_LINES);
+    const bad = read('[data-ifp-bad-fit-list]').slice(0, MAX_FIT_LINES);
+    const asRows = (lines) => lines.map((line) => ({ line, source: 'derived', why: '', url: '' }));
+    session.fit.goodFit = asRows(good);
+    session.fit.badFit = asRows(bad);
+    session.fit.goodFitText = good.join('\n');
+    session.fit.badFitText = bad.join('\n');
+  }
+
+  // ---- Step 3 → transition → questions ------------------------------------
   const transitionDomain = tool.querySelector('[data-ifp-transition-domain]');
+  const transitionFacilities = tool.querySelector('[data-ifp-transition-facilities]');
+  const nextFrom3 = tool.querySelector('[data-ifp-next-from-3]');
 
-  tool.querySelector('[data-ifp-next-from-3]').addEventListener('click', () => {
-    if (transitionDomain) transitionDomain.textContent = websiteInput.value.trim() || 'your website';
+  const facilityIcon = `
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M2 14V6.5L8 2l6 4.5V14H2z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/>
+      <path d="M6 14v-4h4v4" stroke="currentColor" stroke-width="1.3"/>
+    </svg>
+  `;
 
-    // Show the transition screen in place of the numbered steps (it isn't
-    // one itself, so the step dots are left as-is rather than calling
-    // goToStep). API DECISION: real duration, plus which facilities to test
-    // against, come from the backend — fixed at 5s with 3 placeholders here.
+  function renderTransitionFacilities(sites) {
+    if (!transitionFacilities) return;
+    transitionFacilities.innerHTML = sites.map((site) => `
+      <div class="ifp-transition-facility">
+        <span class="ifp-transition-logo" aria-hidden="true">${facilityIcon}</span>
+        <span class="ifp-transition-facility-info">
+          <span class="ifp-transition-facility-name"></span>
+          <span class="ifp-transition-facility-address"></span>
+        </span>
+      </div>
+    `).join('');
+    transitionFacilities.querySelectorAll('.ifp-transition-facility').forEach((row, index) => {
+      row.querySelector('.ifp-transition-facility-name').textContent = sites[index].accountName || '';
+      row.querySelector('.ifp-transition-facility-address').textContent = sites[index].address || '';
+    });
+  }
+
+  function showTransition() {
+    loading.hidden = true;
     steps.forEach((step) => { step.hidden = true; step.classList.remove('is-active'); });
     transition.hidden = false;
-    setTimeout(() => {
+  }
+
+  nextFrom3.addEventListener('click', async () => {
+    if (transitionDomain) transitionDomain.textContent = websiteInput.value.trim() || 'your website';
+    applyFitEdits();
+
+    showTransition();
+    if (transitionFacilities) transitionFacilities.innerHTML = '';
+    nextFrom3.disabled = true;
+    try {
+      const demoSitesPromise = fetchDemoSites().then((sites) => {
+        renderTransitionFacilities(sites);
+        return sites;
+      });
+      await Promise.all([demoSitesPromise, post('segments', {})]);
+      questions = session.questions || [];
       transition.hidden = true;
       renderQuestions();
       goToStep(4);
-    }, 5000);
+    } catch (err) {
+      transition.hidden = true;
+      fail(err);
+      goToStep(3);
+    } finally {
+      nextFrom3.disabled = false;
+    }
   });
 
-  // ---- Step 4: up to 5 clarifying questions, accordion (one open at a time) ----
+  // ---- Step 4: clarifying questions ---------------------------------------
   function renderQuestions() {
     const qList = tool.querySelector('[data-ifp-q-list]');
-    qList.innerHTML = CLARIFY_QUESTIONS.map((q, qIndex) => `
+    qList.innerHTML = questions.map((q, qIndex) => `
       <div class="ifp-q-item" data-ifp-q-item>
         <button type="button" class="ifp-q-question" aria-expanded="false" aria-controls="ifp-q-answer-${qIndex}">
-          <span class="ifp-q-text">${q.text}</span>
+          <span class="ifp-q-text"></span>
           <svg class="chevron" width="12" height="7" viewBox="0 0 12 7" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M1 1l5 5 5-5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </button>
-        <div class="ifp-q-options" id="ifp-q-answer-${qIndex}" hidden>
-          ${q.options.map((opt, optIndex) => `
-            <label class="ifp-q-option">
-              <input type="radio" name="ifp-q-${qIndex}" value="${optIndex}">
-              <span>${opt}</span>
-            </label>
-          `).join('')}
-        </div>
+        <div class="ifp-q-options" id="ifp-q-answer-${qIndex}" hidden></div>
       </div>
     `).join('');
 
-    // Only one question's options may be expanded at a time.
+    qList.querySelectorAll('.ifp-q-item').forEach((item, qIndex) => {
+      const question = questions[qIndex];
+      item.querySelector('.ifp-q-text').textContent = question.question;
+      const optionsEl = item.querySelector('.ifp-q-options');
+      (question.options || []).forEach((option) => {
+        const label = document.createElement('label');
+        label.className = 'ifp-q-option';
+        const input = document.createElement('input');
+        input.type = 'radio';
+        input.name = `ifp-q-${qIndex}`;
+        input.value = option.label;
+        input.dataset.segmentRank = String(question.segmentRank);
+        input.dataset.questionId = question.id;
+        input.dataset.freeText = option.freeText ? 'true' : 'false';
+        const span = document.createElement('span');
+        span.textContent = option.label;
+        label.append(input, span);
+        optionsEl.append(label);
+        if (option.freeText) {
+          const typed = document.createElement('input');
+          typed.type = 'text';
+          typed.className = 'ifp-input ifp-q-free';
+          typed.placeholder = 'Type your answer';
+          typed.hidden = true;
+          typed.addEventListener('keydown', (event) => event.stopPropagation());
+          optionsEl.append(typed);
+        }
+      });
+    });
+
     const closers = [];
     qList.querySelectorAll('.ifp-q-question').forEach((btn) => {
       const panel = document.getElementById(btn.getAttribute('aria-controls'));
@@ -235,33 +496,131 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     });
 
-    // Mark a question answered (shown via CSS on the collapsed header) once
-    // one of its options is picked — each question is single-select.
     qList.querySelectorAll('.ifp-q-options').forEach((optionsEl) => {
       optionsEl.addEventListener('change', () => {
-        optionsEl.closest('.ifp-q-item').classList.add('is-answered');
+        const picked = optionsEl.querySelector('input[type="radio"]:checked');
+        const typed = optionsEl.querySelector('.ifp-q-free');
+        const isFree = picked?.dataset.freeText === 'true';
+        if (typed) {
+          typed.hidden = !isFree;
+          if (isFree) typed.focus();
+        }
+        optionsEl.closest('.ifp-q-item').classList.toggle('is-answered', Boolean(picked) && !isFree);
       });
+      const typed = optionsEl.querySelector('.ifp-q-free');
+      if (typed) {
+        typed.addEventListener('input', () => {
+          optionsEl.closest('.ifp-q-item').classList.toggle('is-answered', typed.value.trim().length > 0);
+        });
+      }
     });
   }
 
-  tool.querySelector('[data-ifp-next-from-4]').addEventListener('click', () => {
-    // API DECISION: the answers would normally be sent back to refine the
-    // profiles. Here we just move on to the (same, mocked) final list.
-    renderList(tool.querySelector('[data-ifp-final-list]'), PROFILES);
-    goToStep(5);
+  const nextFrom4 = tool.querySelector('[data-ifp-next-from-4]');
+
+  nextFrom4.addEventListener('click', async () => {
+    const answers = [];
+    for (let index = 0; index < questions.length; index += 1) {
+      const picked = tool.querySelector(`input[name="ifp-q-${index}"]:checked`);
+      if (!picked) {
+        window.alert('Answer every question before continuing.');
+        return;
+      }
+      let answer = picked.value;
+      if (picked.dataset.freeText === 'true') {
+        const typed = picked.closest('.ifp-q-options').querySelector('.ifp-q-free');
+        answer = typed?.value.trim() || '';
+        if (!answer) {
+          window.alert('Type your own answer before continuing.');
+          typed?.focus();
+          return;
+        }
+      }
+      answers.push({
+        segmentRank: Number(picked.dataset.segmentRank),
+        id: picked.dataset.questionId,
+        answer,
+      });
+    }
+
+    nextFrom4.disabled = true;
+    try {
+      if (answers.length) await post('answers', { answers });
+      showLoading('Finalizing your Ideal Facility Profiles…');
+      await post('finalize', {});
+      const lines = (session.finalSegments || []).map((segment) => segment.criteria || segment.name);
+      renderList(tool.querySelector('[data-ifp-final-list]'), lines);
+      goToStep(5);
+    } catch (err) {
+      hideLoading();
+      goToStep(4);
+      fail(err);
+    } finally {
+      nextFrom4.disabled = false;
+    }
   });
 
-  // ---- Step 5: blurred reveal behind an email gate -------------------------
+  // ---- Step 5: blurred reveal behind a work-email gate --------------------
+  const PERSONAL_EMAIL_DOMAINS = new Set([
+    'gmail.com', 'googlemail.com',
+    'yahoo.com', 'yahoo.co.uk', 'yahoo.co.in', 'yahoo.ca', 'yahoo.com.au', 'ymail.com', 'rocketmail.com',
+    'hotmail.com', 'hotmail.co.uk', 'outlook.com', 'outlook.co.uk', 'live.com', 'msn.com',
+    'icloud.com', 'me.com', 'mac.com',
+    'aol.com', 'aim.com',
+    'proton.me', 'protonmail.com', 'pm.me',
+    'gmx.com', 'gmx.net', 'gmx.de',
+    'mail.com', 'email.com', 'inbox.com',
+    'zoho.com', 'yandex.com', 'yandex.ru',
+    'qq.com', '163.com', '126.com', 'rediffmail.com',
+    'fastmail.com', 'hey.com', 'tutanota.com', 'tuta.com',
+  ]);
+
+  function isWorkEmail(value) {
+    const email = String(value || '').trim().toLowerCase();
+    const domain = email.split('@')[1] || '';
+    if (!domain || domain.includes(' ') || !domain.includes('.')) return false;
+    return ![...PERSONAL_EMAIL_DOMAINS].some((blocked) => domain === blocked || domain.endsWith(`.${blocked}`));
+  }
+
   const emailForm = tool.querySelector('[data-ifp-email-form]');
+  const emailInput = emailForm.querySelector('input[type="email"]');
   const revealWrap = tool.querySelector('[data-ifp-reveal-wrap]');
   const finalList = tool.querySelector('[data-ifp-final-list]');
 
-  emailForm.addEventListener('submit', (e) => {
+  emailInput.addEventListener('input', () => emailInput.setCustomValidity(''));
+
+  restoreLocal();
+
+  emailForm.addEventListener('submit', async (e) => {
     e.preventDefault();
-    // API DECISION: capturing the email is where a real backend call goes —
-    // e.g. storing the lead and unlocking the account. Just reveals the
-    // (already-rendered) list client-side here.
-    finalList.classList.remove('ifp-list-blurred');
-    revealWrap.classList.add('is-revealed');
+    if (!isWorkEmail(emailInput.value)) {
+      emailInput.setCustomValidity('Use your work email. Personal addresses such as Gmail, Yahoo, and Outlook are not accepted.');
+      emailInput.reportValidity();
+      return;
+    }
+    emailInput.setCustomValidity('');
+    const domain = session?.company?.domain || websiteInput.value.trim();
+    const submitButton = emailForm.querySelector('button[type="submit"]');
+    submitButton.disabled = true;
+    try {
+      const res = await fetch(`${apiBase()}/lead`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          domain,
+          email: emailInput.value.trim(),
+          session,
+        }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.error || 'Could not save your email. Try again.');
+      clearLocal();
+      finalList.classList.remove('ifp-list-blurred');
+      revealWrap.classList.add('is-revealed');
+    } catch (err) {
+      fail(err);
+    } finally {
+      submitButton.disabled = false;
+    }
   });
 });

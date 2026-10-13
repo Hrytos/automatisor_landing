@@ -230,4 +230,5 @@ module.exports = {
   resetAuthCache,
   responses,
   chatJson,
+  getSupabaseAccessToken: accessToken,
 }

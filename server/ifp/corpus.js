@@ -124,7 +124,22 @@ async function loadDefaultCorpus() {
     })
     .join('\n\n')
 
-  return { text, accountCount: accounts.length, siteCount }
+  const demoSites = []
+  for (const entry of entries) {
+    const accountName = nameByAccount.get(entry.accountId) || entry.accountId
+    for (const siteId of entry.siteIds || []) {
+      const address = addressBySite.get(siteId)
+      if (!address) continue
+      demoSites.push({ accountName, address })
+    }
+  }
+
+  return { text, accountCount: accounts.length, siteCount, demoSites }
+}
+
+async function getDemoSites() {
+  const { demoSites } = await getDefaultCorpus()
+  return demoSites
 }
 
 async function getDefaultCorpus() {
@@ -136,4 +151,4 @@ function resetDefaultCorpus() {
   cached = null
 }
 
-module.exports = { getDefaultCorpus, resetDefaultCorpus }
+module.exports = { getDefaultCorpus, getDemoSites, resetDefaultCorpus }

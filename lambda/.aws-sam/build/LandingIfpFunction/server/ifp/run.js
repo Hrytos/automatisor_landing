@@ -217,8 +217,7 @@ async function buildQuestions(session) {
   if (!next.segments?.length) throw new Error('Recommend ideal facility profiles first.')
 
   const corpus = await getDefaultCorpus()
-  const questions = []
-  for (const segment of next.segments) {
+  const checks = await Promise.all(next.segments.map(async (segment) => {
     const prompt = fillPrompt(ambiguityPrompt, {
       CRITERIA: segment.criteria,
       CORPUS: corpus.text,
@@ -227,8 +226,9 @@ async function buildQuestions(session) {
     })
     const raw = await chatJson(prompt)
     const rows = normalizeQuestions(raw, segment.rank)
-    if (raw?.ambiguous === true) questions.push(...rows)
-  }
+    return raw?.ambiguous === true ? rows : []
+  }))
+  const questions = checks.flat()
 
   next.questions = questions
   next.answers = []

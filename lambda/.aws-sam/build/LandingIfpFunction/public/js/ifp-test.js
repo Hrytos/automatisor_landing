@@ -198,35 +198,18 @@ function renderFit() {
     el('div', { class: 'row' }, [
       el('button', {
         type: 'button',
-        text: busy ? 'Working…' : 'Recommend ideal facility profiles',
-        disabled: busy ? 'true' : null,
-        onclick: () => post('segments', {}, 'Recommending profiles…'),
+      text: busy ? 'Working…' : 'Continue to clarifying questions',
+      disabled: busy ? 'true' : null,
+      onclick: () => post('segments', {}, 'Choosing profiles and checking them for ambiguity…'),
       }),
     ]),
   ]))
 }
 
 function renderSegments() {
-  const segments = session?.segments || []
-  if (!segments.length) {
-    show('segments', null)
-    return
-  }
-  show('segments', el('div', {}, [
-    el('h2', { text: 'Recommended profiles' }),
-    ...segments.map((segment) => el('article', { class: 'segment' }, [
-      el('strong', { text: `${segment.rank}. ${segment.name}` }),
-      el('div', { class: 'meta', text: segment.axis }),
-      el('p', { text: segment.criteria }),
-      el('p', { text: segment.why || '' }),
-    ])),
-    el('button', {
-      type: 'button',
-      text: busy ? 'Working…' : 'Check for clarifying questions',
-      disabled: busy ? 'true' : null,
-      onclick: () => post('questions', {}, 'Reading each profile for ambiguity…'),
-    }),
-  ]))
+  // Profiles are chosen on the server and go straight into the questioner.
+  // They stay on the session dict; this screen is not shown.
+  show('segments', null)
 }
 
 function questionKey(question) {

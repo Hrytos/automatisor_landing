@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Ideal Facility Profile — Automatisor</title>
+<meta name="description" content="Define the facility where your product wins. Automatisor finds all of them — turn your best-fit knowledge into a living filter across every facility of every target account." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/styles.css" />
+<link rel="icon" href="/images/headerlogo.svg" type="image/svg+xml">
+<%- include('partials/analytics') %>
+</head>
+<body>
+
+<div class="bg-grid" aria-hidden="true"></div>
+
+<%- include('partials/header', { showProductLink: false, headerCtaText: 'Start Free Trial' }) %>
+
+<main>
+
+  <video class="main-bg-video" autoplay muted loop playsinline preload="auto" aria-hidden="true">
+    <source src="/images/herobgvideo.mp4" type="video/mp4">
+  </video>
+  <div class="main-bg-video-overlay" aria-hidden="true"></div>
+
+  <!-- ============ HERO ============ -->
+  <section class="ifp-hero">
+    <div class="container ifp-hero-inner">
+      <div class="ifp-hero-copy">
+        <div class="tag-pill"><span class="dot"></span>Ideal Facility Profile</div>
+        <h1>Define the facility where your product wins. Automatisor finds all of them.</h1>
+        <p>An Ideal Facility Profile turns your best-fit knowledge into a living filter across every facility of every target account.</p>
+        <div class="hero-actions ifp-hero-actions">
+          <a href="https://app.automatisor.com" class="btn btn-light btn-lg btn-cta-trial">Start Free Trial</a>
+          <a href="/demo" class="btn btn-outline btn-lg">Talk to us</a>
+        </div>
+      </div>
+      <div class="ifp-hero-visual">
+        <div class="criteria-row">
+          <p><strong>Fulfilment sites with each picking operations spanning 200k+ sq.ft and running 2 or more shifts</strong> — the facility runs multi-shift, high-throughput picking operations consistent with your product's ideal deployment conditions.</p>
+          <span class="pill pill-green">92% MATCH</span>
+        </div>
+        <div class="criteria-row">
+          <p><strong>Cross-docking distribution center with dedicated returns processing bay</strong> — active job postings and dock-door utilization confirm operations matching your target profile.</p>
+          <span class="pill pill-green">87% MATCH</span>
+        </div>
+        <div class="criteria-row no-match">
+          <p><strong>Single-shift facility under 50k sq.ft with no automation signals</strong> — scale and operating conditions fall outside your defined profile.</p>
+          <span class="pill pill-red">NO MATCH</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ IFP BUILDER TOOL ============ -->
+  <section class="ifp-tool-section" id="try-it">
+    <div class="container">
+      <div class="section-head section-head-center">
+        <div class="tag-pill"><span class="dot"></span>Try It Live</div>
+        <h2>Build your Ideal Facility Profile</h2>
+        <p>See how Automatisor turns your product into a facility-matching filter — in under a minute.</p>
+      </div>
+
+      <div class="ifp-tool" data-ifp-tool>
+        <div class="ifp-tool-steps" aria-hidden="true">
+          <span class="ifp-step-dot is-active" data-step-dot="1">1</span>
+          <span class="ifp-step-line"></span>
+          <span class="ifp-step-dot" data-step-dot="2">2</span>
+          <span class="ifp-step-line"></span>
+          <span class="ifp-step-dot" data-step-dot="3">3</span>
+          <span class="ifp-step-line"></span>
+          <span class="ifp-step-dot" data-step-dot="4">4</span>
+          <span class="ifp-step-line"></span>
+          <span class="ifp-step-dot" data-step-dot="5">5</span>
+        </div>
+
+        <div class="ifp-transition" data-ifp-loading hidden>
+          <div class="ifp-transition-spinner" aria-hidden="true"></div>
+          <p class="ifp-transition-text" data-ifp-loading-text role="status"></p>
+        </div>
+
+        <!-- STEP 1: company website -->
+        <div class="ifp-step is-active" data-ifp-step="1">
+          <h3 class="ifp-step-title">What's your company website?</h3>
+          <p class="ifp-step-sub">We'll use it to suggest your solutions in the next step.</p>
+          <form class="ifp-website-form" data-ifp-website-form>
+            <input type="text" class="ifp-input" placeholder="yourcompany.com" data-ifp-website-input required>
+            <button type="submit" class="btn btn-light btn-lg">Continue</button>
+          </form>
+        </div>
+
+        <!-- STEP 2: pick one solution (editable descriptions) -->
+        <div class="ifp-step" data-ifp-step="2" hidden>
+          <h3 class="ifp-step-title">Which solution should we build the profile around?</h3>
+          <p class="ifp-step-sub">We found these on <strong data-ifp-domain-label>your website</strong>. Pick one — descriptions are editable.</p>
+          <div class="ifp-solution-list" data-ifp-solution-list></div>
+          <div class="ifp-step-actions">
+            <button type="button" class="btn btn-outline" data-ifp-back="1">Back</button>
+            <button type="button" class="btn btn-light btn-lg" data-ifp-next-from-2 disabled>Continue</button>
+          </div>
+        </div>
+
+        <!-- STEP 3: good-fit vs bad-fit facility examples -->
+        <div class="ifp-step" data-ifp-step="3" hidden>
+          <h3 class="ifp-step-title">Here's what good-fit and bad-fit facilities look like for <strong data-ifp-solution-label>your solution</strong></h3>
+          <p class="ifp-step-sub">Edit an example or add your own so they match how you'd actually qualify a facility.</p>
+          <div class="ifp-fit-columns">
+            <div class="ifp-fit-col ifp-fit-col--good">
+              <span class="ifp-fit-col-label"><span class="ifp-fit-dot ifp-fit-dot--good"></span>Good-fit examples</span>
+              <div class="ifp-fit-example-list" data-ifp-good-fit-list></div>
+              <button type="button" class="ifp-fit-add" data-ifp-add-fit="good">Add example</button>
+            </div>
+            <div class="ifp-fit-col ifp-fit-col--bad">
+              <span class="ifp-fit-col-label"><span class="ifp-fit-dot ifp-fit-dot--bad"></span>Bad-fit examples</span>
+              <div class="ifp-fit-example-list" data-ifp-bad-fit-list></div>
+              <button type="button" class="ifp-fit-add" data-ifp-add-fit="bad">Add example</button>
+            </div>
+          </div>
+          <div class="ifp-step-actions">
+            <button type="button" class="btn btn-outline" data-ifp-back="2">Back</button>
+            <button type="button" class="btn btn-light btn-lg" data-ifp-next-from-3>Continue</button>
+          </div>
+        </div>
+
+        <!-- TRANSITION: not a numbered step — how long this takes, and which
+             facilities it tests against, are decided by the backend API.
+             Fixed at 5s with 3 placeholder facilities for now. -->
+        <div class="ifp-transition" data-ifp-transition hidden>
+          <div class="ifp-transition-spinner" aria-hidden="true"></div>
+          <p class="ifp-transition-text">Building out Ideal Facility Profiles for <strong data-ifp-transition-domain>your website</strong> &amp; testing it against fully researched facilities.</p>
+          <div class="ifp-transition-facilities">
+            <div class="ifp-transition-facility">
+              <span class="ifp-transition-logo" aria-hidden="true">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M2 14V6.5L8 2l6 4.5V14H2z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/>
+                  <path d="M6 14v-4h4v4" stroke="currentColor" stroke-width="1.3"/>
+                </svg>
+              </span>
+              <span class="ifp-transition-facility-info">
+                <span class="ifp-transition-facility-name">Target</span>
+                <span class="ifp-transition-facility-address">Import Distribution Center — Savannah, GA</span>
+              </span>
+            </div>
+            <div class="ifp-transition-facility">
+              <span class="ifp-transition-logo" aria-hidden="true">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M2 14V6.5L8 2l6 4.5V14H2z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/>
+                  <path d="M6 14v-4h4v4" stroke="currentColor" stroke-width="1.3"/>
+                </svg>
+              </span>
+              <span class="ifp-transition-facility-info">
+                <span class="ifp-transition-facility-name">Target</span>
+                <span class="ifp-transition-facility-address">Regional Distribution Center — Woodland, CA</span>
+              </span>
+            </div>
+            <div class="ifp-transition-facility">
+              <span class="ifp-transition-logo" aria-hidden="true">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M2 14V6.5L8 2l6 4.5V14H2z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/>
+                  <path d="M6 14v-4h4v4" stroke="currentColor" stroke-width="1.3"/>
+                </svg>
+              </span>
+              <span class="ifp-transition-facility-info">
+                <span class="ifp-transition-facility-name">Target</span>
+                <span class="ifp-transition-facility-address">Sortation Center — Romeoville, IL</span>
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- STEP 4: clarifying questions (how many, and which ones, are decided by the backend API) -->
+        <div class="ifp-step" data-ifp-step="4" hidden>
+          <h3 class="ifp-step-title">A few quick questions to sharpen your profile</h3>
+          <p class="ifp-step-sub">Automatisor only asks follow-ups that will meaningfully change your profile — up to 5.</p>
+          <div class="ifp-q-list" data-ifp-q-list></div>
+          <div class="ifp-step-actions">
+            <button type="button" class="btn btn-outline" data-ifp-back="3">Back</button>
+            <button type="button" class="btn btn-light btn-lg" data-ifp-next-from-4>Continue</button>
+          </div>
+        </div>
+
+        <!-- STEP 5: final IFPs, blurred until email is given -->
+        <div class="ifp-step" data-ifp-step="5" hidden>
+          <h3 class="ifp-step-title">Your final Ideal Facility Profiles are ready</h3>
+          <p class="ifp-step-sub">Enter your work email to reveal the full profiles.</p>
+          <div class="ifp-reveal-wrap" data-ifp-reveal-wrap>
+            <ul class="ifp-list ifp-list-blurred" data-ifp-final-list></ul>
+            <div class="ifp-reveal-gate" data-ifp-reveal-gate>
+              <p>Enter your work email to unlock your profiles</p>
+              <form class="ifp-email-form" data-ifp-email-form>
+                <input type="email" class="ifp-input" placeholder="you@company.com" required>
+                <button type="submit" class="btn btn-light btn-lg">Reveal my profiles</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<%- include('partials/footer') %>
+
+<script src="/js/main.js"></script>
+<script src="/js/ifp-tool.js"></script>
+</body>
+</html>
