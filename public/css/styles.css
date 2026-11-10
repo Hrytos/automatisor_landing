@@ -1718,7 +1718,7 @@ button { font-family: inherit; cursor: pointer; }
   padding: 40px;
   text-align: center;
 }
-.pricing-card-head { display: flex; flex-direction: column; height: 150px; }
+.pricing-card-head { display: flex; flex-direction: column; height: 176px; }
 .pricing-card-head .pricing-amount,
 .pricing-card-head .pricing-includes,
 .pricing-card-head > a.btn { margin-top: auto; }
@@ -1803,6 +1803,7 @@ button { font-family: inherit; cursor: pointer; }
 }
 .pricing-features li strong { color: var(--light-panel-text); }
 .pricing-features li.pricing-feature-group { display: block; }
+.pricing-feature-note { font-size: 12px; color: var(--light-panel-text-sub); opacity: 0.8; margin-top: 2px; }
 .feature-copy { display: flex; flex-direction: column; padding-top: 2px; }
 .feature-title { font-weight: 700; color: var(--text-primary); margin-bottom: 2px; }
 .feature-title-row { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; margin-bottom: 2px; }
@@ -1838,7 +1839,11 @@ button { font-family: inherit; cursor: pointer; }
 .pricing-cta { width: 75%; }
 .pricing-card .btn-light { background: var(--light-panel-text); color: #fff; }
 .pricing-card .btn-light:hover { background: #000; }
+.pricing-compare-link { margin-top: 28px; text-align: center; font-size: 15px; }
+.pricing-compare-link a { color: #fff; font-weight: 600; }
+.pricing-compare-link a:hover { text-decoration: underline; }
 .pricing-note { margin-top: 16px; font-size: 12.5px; color: var(--light-panel-text-sub); }
+.pricing-note.pricing-users { margin-top: 4px; font-size: 15px; color: var(--light-panel-text-sub); }
 .pricing-includes { margin-top: 20px; font-size: 16px; color: var(--light-panel-text-sub); }
 .pricing-includes strong { color: var(--light-panel-text); }
 
@@ -2058,6 +2063,14 @@ button { font-family: inherit; cursor: pointer; }
 /* ==========================================================================
    FAQ
    ========================================================================== */
+.addons-section { position: relative; z-index: 1; padding: 40px 0; }
+.addon-plan-head { display: inline-flex; flex-direction: column; align-items: center; gap: 6px; }
+.addon-plan-name { font-size: 14px; font-weight: 700; color: var(--light-panel-text); }
+.addons-section .compare-feature-name { color: var(--brand-orange); font-weight: 700; text-transform: uppercase; }
+#extras .compare-feature-name { color: #000; font-weight: 400; text-transform: none; }
+#extras .compare-table th { font-weight: 700; color: var(--light-panel-text); }
+#extras .compare-table th:first-child { width: 75%; }
+.addon-plan-desc { font-size: 12.5px; font-weight: 400; text-transform: none; letter-spacing: normal; line-height: 1.45; }
 .pipeline-banner-section { position: relative; z-index: 1; padding: 40px 0; }
 .pipeline-banner {
   max-width: 780px;
@@ -2073,7 +2086,7 @@ button { font-family: inherit; cursor: pointer; }
   max-width: 600px;
   margin: 0 auto 28px;
   color: rgba(255, 255, 255, 0.85);
-  font-size: 19px;
+  font-size: 16px;
   line-height: 1.6;
 }
 

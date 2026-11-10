@@ -21,6 +21,10 @@ app.get('/pricing', (req, res) => {
   res.render('pricing');
 });
 
+app.get('/features-comparison', (req, res) => {
+  res.render('features-comparison');
+});
+
 app.get('/ideal-facility-profile', (req, res) => {
   res.render('ideal-facility-profile');
 });
