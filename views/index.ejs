@@ -7,7 +7,7 @@
 <meta name="description" content="Automatisor helps warehouse automation providers acquire, retain and expand customers using warehouse intelligence." />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Roboto+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/css/styles.css" />
 <link rel="icon" href="/images/headerlogo.svg" type="image/svg+xml">
 <%- include('partials/analytics') %>
@@ -28,20 +28,131 @@
   <!-- ============ HERO ============ -->
   <section class="hero">
     <div class="container hero-inner">
-      <button type="button" class="badge-pill hero-badge-trigger" id="hero-badge-trigger" aria-haspopup="dialog">
-            For<span class="sep">|</span><strong>Customer Acquistion</strong>
-      </button>
-      <h1 class="hero-title">
-        Your next automation opportunity is<br>
-        hiding in <span class="text-accent">warehouses you already target.</span><br>
-        Find it before your competitors do.
-      </h1>
-      <p class="hero-sub">
-        Identify warehouses worth pursuing, uncover why they are strong automation candidates and prospect with confidence.
-      </p>
-      <div class="hero-actions">
-        <a href="https://app.automatisor.com" class="btn btn-light btn-lg btn-cta-trial">Start Free Trial</a>
-        <a href="/demo" class="btn btn-outline btn-lg">Talk to us</a>
+      <div class="hero-copy">
+        <button type="button" class="badge-pill hero-badge-trigger" id="hero-badge-trigger" aria-haspopup="dialog">
+              For<span class="sep">|</span><strong>Customer Acquistion</strong>
+        </button>
+        <p class="hero-eyebrow">Built for system integrators &amp; robotics companies</p>
+        <h1 class="hero-title">
+          Your next <span class="text-accent">warehouse deployment </span>starts here
+        </h1>
+        <h2 class="hero-sub">AI agents that discover, qualify and engage US facilities ready for your solution</h2>
+        <div class="hero-actions">
+          <a href="https://app.automatisor.com" class="btn btn-light btn-lg btn-cta-trial">Start Free Trial</a>
+          <a href="/demo" class="btn btn-outline btn-lg">Talk to us</a>
+        </div>
+      </div>
+      <div class="hero-aside">
+        <div class="hero-carousel" data-carousel aria-roledescription="carousel" aria-label="What Automatisor finds">
+          <div class="hero-carousel-track">
+            <!-- Card 1: ideal facility criteria -->
+            <article class="hero-card is-active" data-carousel-slide aria-roledescription="slide" aria-label="1 of 3">
+              <div class="hero-card-body">
+                <h3 class="hero-card-title">Find ideal facilities for me</h3>
+                <p class="hero-card-label is-strong">Criteria</p>
+                <div class="criteria-grid">
+                  <div class="criteria-tile">
+                    <p class="criteria-label"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 21V8l9-5 9 5v13"/><path d="M8 21v-7h8v7"/><path d="M12 14v7"/></svg>Site type</p>
+                    <p class="criteria-value">Distribution center (DC)</p>
+                    <p class="criteria-desc">Must be explicitly described as a DC in the site research.</p>
+                  </div>
+                  <div class="criteria-tile">
+                    <p class="criteria-label"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="8" width="20" height="8" rx="1.5"/><path d="M6 8v3M10 8v4M14 8v3M18 8v4"/></svg>Size</p>
+                    <p class="criteria-value">&ge; 100,000 sq ft</p>
+                    <p class="criteria-desc">At least 100,000 square feet of area.</p>
+                  </div>
+                  <div class="criteria-tile">
+                    <p class="criteria-label"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Shifts</p>
+                    <p class="criteria-value">2+ shifts</p>
+                    <p class="criteria-desc"><span class="criteria-tag tag-blue">Evidence</span>Site-level or account-level</p>
+                    <p class="criteria-desc"><span class="criteria-tag tag-red">Exclude</span>Site record explicitly says one shift</p>
+                  </div>
+                  <div class="criteria-tile">
+                    <p class="criteria-label"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c0-3.6 2.9-6 6.5-6s6.5 2.4 6.5 6"/><path d="M16 4.7a3.5 3.5 0 0 1 0 6.6M18 14.3c2.1.7 3.5 2.9 3.5 5.7"/></svg>Labor</p>
+                    <p class="criteria-value">Labor issues present</p>
+                    <p class="criteria-desc"><span class="criteria-tag tag-blue">Primary</span>Site-level evidence</p>
+                    <p class="criteria-desc"><span class="criteria-tag tag-amber">Fallback</span>Account-level labor urgency, only if site has no labor signal</p>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <!-- Card 2: facilities matching the criteria. The first row's "Why?"
+                 panel is always shown, it can't be collapsed. -->
+            <article class="hero-card" data-carousel-slide aria-roledescription="slide" aria-label="2 of 3">
+              <div class="hero-card-body">
+                <h3 class="hero-card-title">Found facilities that match</h3>
+                <div class="match-table" role="table" aria-label="Facilities that match criteria">
+                  <div class="match-row match-head" role="row">
+                    <span role="columnheader"><span class="sr-only">Details</span></span>
+                    <span role="columnheader">Account</span>
+                    <span role="columnheader">Facility</span>
+                    <span role="columnheader" class="match-fit-head">IFP Fitment</span>
+                  </div>
+                  <div class="match-item is-open">
+                    <div class="match-row" role="row">
+                      <span class="match-toggle" aria-hidden="true"></span>
+                      <span role="cell" class="match-account"><span class="match-logo">TG</span>Target</span>
+                      <span role="cell">2050 E Beamer St, Woodland, CA 95776</span>
+                      <span role="cell"><span class="match-fit">High</span></span>
+                    </div>
+                    <div class="match-why">
+                      <strong>Why?</strong>
+                      <p>High fit for the criteria because it is a documented regional DC with a 344,065-square-foot addition, two operating shifts, and clear labor-pressure signals. Site evidence includes ongoing warehouse and operations hiring, physically demanding work, long holiday hours, and negative pay and management themes.</p>
+                      <strong class="match-details">Details &rarr;</strong>
+                    </div>
+                  </div>
+                  <div class="match-row" role="row">
+                    <span aria-hidden="true"></span>
+                    <span role="cell" class="match-account"><span class="match-logo">TG</span>Target</span>
+                    <span role="cell">1100 Valley Rd, Oconomowoc, WI 53066</span>
+                    <span role="cell"><span class="match-fit">High</span></span>
+                  </div>
+                  <div class="match-row" role="row">
+                    <span aria-hidden="true"></span>
+                    <span role="cell" class="match-account"><span class="match-logo">Ad</span>Allen Distribution</span>
+                    <span role="cell">34 Dauphin Dr, Mechanicsburg, PA 17050</span>
+                    <span role="cell"><span class="match-fit">High</span></span>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <!-- Card 3: facility fit -->
+            <article class="hero-card" data-carousel-slide aria-roledescription="slide" aria-label="3 of 3">
+              <div class="hero-card-body">
+                <h3 class="hero-card-title">Regional DC</h3>
+                <p class="hero-card-sub">Target, 2050 E Beamer St, Woodland, CA 95776</p>
+                <dl class="hero-card-stats">
+                  <div><dt>Size</dt><dd>1.86 M sq ft</dd></div>
+                  <div><dt>Shifts</dt><dd>2 per day</dd></div>
+                  <div><dt>Trailer loading</dt><dd>FKI Logistex extendable conveyor, Pallet Jacks</dd></div>
+                </dl>
+                <p class="hero-card-label">Signals found</p>
+                <ul class="hero-card-signals">
+                  <li>Large, multi-shift distribution operation</li>
+                  <li>Labor-intensive work with ongoing hiring</li>
+                  <li>Trailer loading automation already in use</li>
+                  <li>Material-handling safety exposure - hand injury at conveyor belt</li>
+                </ul>
+                <p class="hero-card-label">Fit with your solutions</p>
+                <ul class="hero-card-fits">
+                  <li><span>AMR-assisted pallet handling</span><span class="fit-tag fit-strong">Strong fit</span></li>
+                </ul>
+              </div>
+              <p class="hero-card-foot">40 contacts found &middot; outreach drafted &middot; ready to send</p>
+            </article>
+          </div>
+          <div class="hero-carousel-nav">
+            <button type="button" class="hero-carousel-arrow" data-carousel-prev aria-label="Previous card">&larr;</button>
+            <div class="hero-carousel-dots">
+              <button type="button" class="hero-carousel-dot is-active" data-carousel-dot aria-label="Show card 1"></button>
+              <button type="button" class="hero-carousel-dot" data-carousel-dot aria-label="Show card 2"></button>
+              <button type="button" class="hero-carousel-dot" data-carousel-dot aria-label="Show card 3"></button>
+            </div>
+            <button type="button" class="hero-carousel-arrow" data-carousel-next aria-label="Next card">&rarr;</button>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -70,7 +181,7 @@
             </div>
             <div class="step-card">
               <span class="step-num">3</span>
-              <p>Get a highly personalised, ready-to-send outreach campaign in 10 mins, prep for discovery</p>
+              <p>Prospect the right people with ready-to-send outreach campaigns drafted in 10 mins, prep for discovery</p>
             </div>
           </div>
 

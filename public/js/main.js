@@ -1,4 +1,48 @@
 document.addEventListener('DOMContentLoaded', () => {
+  // Hero carousel: shows one [data-carousel-slide] at a time, driven by the
+  // prev/next arrows and dots. Auto-advances every 6s, pausing while the
+  // pointer or keyboard focus is inside, and not at all for reduced motion.
+  document.querySelectorAll('[data-carousel]').forEach((carousel) => {
+    const slides = [...carousel.querySelectorAll('[data-carousel-slide]')];
+    const dots = [...carousel.querySelectorAll('[data-carousel-dot]')];
+    if (slides.length < 2) return;
+    let current = slides.findIndex((s) => s.classList.contains('is-active'));
+    if (current < 0) current = 0;
+
+    const show = (index) => {
+      current = (index + slides.length) % slides.length;
+      slides.forEach((slide, i) => {
+        const active = i === current;
+        slide.classList.toggle('is-active', active);
+        slide.setAttribute('aria-hidden', active ? 'false' : 'true');
+        slide.inert = !active;
+      });
+      dots.forEach((dot, i) => {
+        dot.classList.toggle('is-active', i === current);
+        dot.setAttribute('aria-current', i === current ? 'true' : 'false');
+      });
+    };
+
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let timer = null;
+    const stop = () => { clearInterval(timer); timer = null; };
+    const start = () => {
+      if (reduceMotion || timer) return;
+      timer = setInterval(() => show(current + 1), 6000);
+    };
+
+    carousel.querySelector('[data-carousel-prev]')?.addEventListener('click', () => { show(current - 1); stop(); start(); });
+    carousel.querySelector('[data-carousel-next]')?.addEventListener('click', () => { show(current + 1); stop(); start(); });
+    dots.forEach((dot, i) => dot.addEventListener('click', () => { show(i); stop(); start(); }));
+    carousel.addEventListener('mouseenter', stop);
+    carousel.addEventListener('mouseleave', start);
+    carousel.addEventListener('focusin', stop);
+    carousel.addEventListener('focusout', start);
+
+    show(current);
+    start();
+  });
+
   // Expandable table rows (sample-table--expandable): each ".sample-row" is
   // immediately followed by its own ".detail-row" — the pair is duplicated
   // together to add rows, so the detail row is found structurally (next

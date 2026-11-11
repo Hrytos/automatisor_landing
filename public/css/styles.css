@@ -447,16 +447,32 @@ button { font-family: inherit; cursor: pointer; }
 .hero {
   position: relative;
   z-index: 1;
-  padding: 144px 0 120px;
-  text-align: center;
+  padding: 48px 0 120px;
+  text-align: left;
+}
+/* Copy on the left, right column kept free for another section */
+.hero-inner {
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: 48px;
+  align-items: center;
+}
+.hero-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-primary);
+  font-weight: 700;
+  margin-bottom: 20px;
 }
 .hero-title {
-  font-size: 52px;
-  line-height: 1.14;
-  font-weight: 700;
-  letter-spacing: -0.025em;
-  max-width: 1000px;
-  margin: 0 auto;
+  font-size: 56px;
+  line-height: 1.04;
+  font-weight: 800;
+  letter-spacing: -0.035em;
+  max-width: none;
+  margin: 0;
 }
 .hero-title em { font-style: italic; font-weight: 500; color: var(--text-secondary); }
 .text-accent { color: var(--accent-green); }
@@ -542,17 +558,204 @@ button { font-family: inherit; cursor: pointer; }
 }
 
 .hero-sub {
-  max-width: 660px;
-  margin: 24px auto 0;
+  max-width: 34ch;
+  margin: 20px 0 0;
   color: var(--text-secondary);
-  font-size: 17px;
+  font-size: 20px;
+  line-height: 1.5;
+  font-weight: 400;
 }
 .hero-actions {
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   gap: 14px;
-  margin-top: 32px;
+  margin-top: 36px;
 }
+
+/* ---- Hero carousel (right column): one card visible at a time. Slides
+   share a single grid cell so the track is as tall as the tallest card and
+   switching never shifts the layout. ---- */
+.hero-carousel { width: 100%; }
+.hero-carousel-track { display: grid; }
+.hero-card {
+  /* White card: the shared tokens are re-pointed to the light-panel palette
+     so every nested element (text, labels, borders, inset rows) reads on white. */
+  --text-primary: var(--light-panel-text);
+  --text-secondary: var(--light-panel-text-sub);
+  --border-light: var(--light-panel-border);
+  --hero-card-inset: #f4f4f2;
+  grid-area: 1 / 1;
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border: 1px solid var(--border-light);
+  text-align: left;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.4s ease, visibility 0.4s;
+}
+.hero-card.is-active { opacity: 1; visibility: visible; }
+.hero-card-body { flex: 1; padding: 28px 24px 24px; }
+.hero-card-title { font-size: 24px; font-weight: 700; letter-spacing: -0.015em; color: var(--text-primary); }
+.hero-card-sub { margin-top: 4px; font-size: 14px; color: var(--text-secondary); }
+.hero-card-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  margin-top: 20px;
+  border: 1px solid var(--border-light);
+}
+.hero-card-stats > div { padding: 12px 14px; }
+.hero-card-stats > div + div { border-left: 1px solid var(--border-light); }
+.hero-card-stats dt,
+.hero-card-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+.hero-card-stats dd { margin-top: 4px; font-size: 15px; font-weight: 700; color: var(--text-primary); }
+.hero-card-label { margin-top: 24px; }
+.hero-card-signals { list-style: none; margin-top: 10px; display: flex; flex-direction: column; gap: 8px; }
+.hero-card-signals li { position: relative; padding-left: 22px; font-size: 14px; color: var(--text-primary); opacity: 0.9; }
+.hero-card-signals li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.35em;
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  background: var(--brand-orange);
+}
+.hero-card-fits { list-style: none; margin-top: 10px; display: flex; flex-direction: column; gap: 8px; }
+.hero-card-fits li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 14px;
+  background: var(--hero-card-inset);
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+.hero-card-fits li.is-muted { color: var(--text-secondary); opacity: 0.7; }
+.fit-tag { flex-shrink: 0; padding: 3px 8px; font-size: 12px; font-weight: 700; }
+.fit-strong { background: var(--brand-orange); color: #fff; }
+.fit-good { border: 1px solid var(--text-secondary); color: var(--text-primary); }
+.fit-early { font-weight: 400; color: var(--text-secondary); }
+.hero-card-foot {
+  padding: 14px 24px;
+  border-top: 1px solid var(--border-light);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+/* Card 1: 2x2 grid of ideal-facility criteria */
+.criteria-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 20px; }
+.hero-card-label.is-strong { font-weight: 700; }
+.hero-card-label + .criteria-grid { margin-top: 10px; }
+.criteria-tile { padding: 14px; border: 1px solid var(--border-light); border-radius: var(--radius-md); }
+.criteria-label { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--text-secondary); }
+.criteria-label svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; }
+.criteria-value { margin-top: 8px; font-size: 15px; font-weight: 700; color: var(--text-primary); }
+.criteria-desc { margin-top: 6px; font-size: 12.5px; line-height: 1.5; color: var(--text-secondary); }
+.criteria-tag { display: inline-block; margin-right: 6px; padding: 1px 8px; border-radius: var(--radius-pill); font-size: 11.5px; font-weight: 500; }
+.tag-blue { background: rgba(37, 99, 235, 0.1); color: #1d4ed8; }
+.tag-red { background: var(--accent-red-bg); color: #b42318; }
+.tag-amber { background: var(--brand-yellow-bg); color: #8a5a00; }
+
+/* Card 2: table of matching facilities, styled like the other hero cards */
+.match-table {
+  margin-top: 20px;
+  border: 1px solid var(--border-light);
+  font-size: 13px;
+  color: var(--text-primary);
+}
+.match-row {
+  display: grid;
+  /* minmax(0, …) so every row gets identical column widths regardless of
+     its content; plain 1fr grows to fit the longest word and misaligns rows */
+  grid-template-columns: 32px minmax(0, 1fr) minmax(0, 1.35fr) 84px;
+  border-bottom: 1px solid var(--border-light);
+}
+.match-row > * { min-width: 0; padding: 10px; display: flex; align-items: center; overflow-wrap: anywhere; }
+.match-row > * + * { border-left: 1px solid var(--border-light); }
+.match-table > :last-child { border-bottom: none; }
+.match-head > * {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+.match-fit-head { justify-content: space-between; gap: 4px; }
+.match-sort { color: var(--brand-orange); }
+.match-item.is-open > .match-row { background: var(--hero-card-inset); }
+.match-toggle { justify-content: center; }
+.match-toggle::before {
+  content: "+";
+  width: 16px;
+  height: 16px;
+  border: 1px solid var(--text-secondary);
+  display: grid;
+  place-items: center;
+  font-size: 12px;
+  line-height: 1;
+  color: var(--text-secondary);
+}
+.match-toggle.is-static::before { content: "+"; opacity: 0.5; }
+.match-item.is-open .match-toggle::before { content: "\2212"; }
+.match-account { gap: 8px; font-weight: 700; }
+.match-logo {
+  flex-shrink: 0;
+  width: 22px;
+  height: 22px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--border-light);
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+.match-fit { padding: 3px 8px; background: var(--brand-orange); color: #fff; font-size: 12px; font-weight: 700; }
+.match-why { padding: 12px 14px; background: var(--hero-card-inset); border-bottom: 1px solid var(--border-light); font-size: 13px; line-height: 1.55; color: var(--text-secondary); }
+.match-why strong {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.match-why p { margin-top: 6px; color: var(--text-primary); opacity: 0.9; }
+.match-why .match-details { margin-top: 10px; }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+.hero-carousel-nav { display: flex; align-items: center; justify-content: center; gap: 16px; margin-top: 16px; }
+.hero-carousel-arrow {
+  width: 32px;
+  height: 32px;
+  border: 1px solid var(--border-light);
+  border-radius: 50%;
+  background: transparent;
+  color: var(--text-primary);
+  font-size: 14px;
+  transition: border-color 0.15s ease;
+}
+.hero-carousel-arrow:hover { border-color: var(--text-secondary); }
+.hero-carousel-dots { display: flex; gap: 8px; }
+.hero-carousel-dot {
+  width: 8px;
+  height: 8px;
+  border: none;
+  border-radius: 50%;
+  background: var(--border-light);
+  transition: background 0.15s ease, width 0.15s ease;
+}
+.hero-carousel-dot.is-active { width: 22px; border-radius: 4px; background: var(--brand-orange); }
 
 /* ==========================================================================
    Market Panel (light contrast card)
@@ -2158,7 +2361,16 @@ button { font-family: inherit; cursor: pointer; }
   .mobile-menu-trigger { display: flex; }
   .brand-logo { height: 62px; }
   .hero-badge-trigger { display: none !important; }
-  .hero-title { font-size: 38px; }
+  .hero-title { font-size: 40px; }
+  .hero-sub { font-size: 17px; }
+  .hero-eyebrow { font-size: 12px; }
+  /* Mobile: single centred column, as before */
+  .hero { text-align: center; }
+  .hero-inner { grid-template-columns: 1fr; }
+  .hero-title, .hero-sub { margin-left: auto; margin-right: auto; }
+  .hero-actions { justify-content: center; }
+  .hero-aside:empty { display: none; }
+  .hero-aside { max-width: 520px; width: 100%; margin: 8px auto 0; }
   .booking-section { padding: 128px 0 64px; }
   .booking-embed { height: 640px; }
   .pricing-cards { grid-template-columns: 1fr; }
@@ -2203,6 +2415,7 @@ button { font-family: inherit; cursor: pointer; }
 @media (max-width: 560px) {
   .container { padding: 0 20px; }
   .hero-title { font-size: 30px; }
+  .criteria-grid { grid-template-columns: 1fr; }
   .hero-actions { flex-direction: column; width: 100%; }
 }
 
