@@ -1839,6 +1839,20 @@ button { font-family: inherit; cursor: pointer; }
 .pricing-cta { width: 75%; }
 .pricing-card .btn-light { background: var(--light-panel-text); color: #fff; }
 .pricing-card .btn-light:hover { background: #000; }
+/* Horizontal Starter card below the plan grid: intro + price | features | CTA */
+.pricing-card-wide { max-width: 1100px; margin: 24px auto 0; text-align: left; }
+.pricing-wide-body {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr 0.9fr;
+  gap: 40px;
+  align-items: center;
+}
+.pricing-wide-title { font-size: 22px; font-weight: 700; letter-spacing: -0.01em; line-height: 1.3; color: var(--light-panel-text); }
+.pricing-wide-desc { margin: 8px 0 20px; font-size: 15px; color: var(--light-panel-text-sub); }
+.pricing-card-wide .pricing-amount { justify-content: flex-start; }
+.pricing-card-wide .pricing-features { margin: 0; }
+.pricing-card-wide .pricing-card-footer { min-height: 0; text-align: center; }
+.pricing-card-wide .pricing-cta { width: 100%; }
 .pricing-compare-link { margin-top: 28px; text-align: center; font-size: 15px; }
 .pricing-compare-link a { color: #fff; font-weight: 600; }
 .pricing-compare-link a:hover { text-decoration: underline; }
@@ -1994,7 +2008,7 @@ button { font-family: inherit; cursor: pointer; }
 .compare-table td:not(:first-child) { text-align: center; vertical-align: middle; }
 .compare-feature-cell { display: flex; flex-direction: column; gap: 4px; }
 .compare-feature-name-row { display: inline-flex; align-items: center; gap: 8px; flex-wrap: wrap; }
-.compare-feature-name { font-weight: 600; color: var(--light-panel-text); }
+.compare-feature-name { font-weight: 700; color: var(--light-panel-text); }
 .compare-feature-desc { font-weight: 400; color: var(--light-panel-text-sub); line-height: 1.45; }
 .compare-table .group-row td { font-size: 14px; letter-spacing: 0.03em; padding: 14px 24px; color: var(--brand-orange); background: #fff; }
 .compare-table .group-row-body { display: inline-flex; flex-direction: column; gap: 3px; }
@@ -2066,11 +2080,18 @@ button { font-family: inherit; cursor: pointer; }
 .addons-section { position: relative; z-index: 1; padding: 40px 0; }
 .addon-plan-head { display: inline-flex; flex-direction: column; align-items: center; gap: 6px; }
 .addon-plan-name { font-size: 14px; font-weight: 700; color: var(--light-panel-text); }
-.addons-section .compare-feature-name { color: var(--brand-orange); font-weight: 700; text-transform: uppercase; }
-#extras .compare-feature-name { color: #000; font-weight: 400; text-transform: none; }
 #extras .compare-table th { font-weight: 700; color: var(--light-panel-text); }
 #extras .compare-table th:first-child { width: 75%; }
 .addon-plan-desc { font-size: 12.5px; font-weight: 400; text-transform: none; letter-spacing: normal; line-height: 1.45; }
+/* Header row gets the same orange-to-pink band as the .pricing-plan strip on the pricing cards */
+#add-ons .compare-table thead tr,
+#extras .compare-table thead tr { background: linear-gradient(to right, var(--brand-orange), #CC0066); }
+#add-ons .compare-table th,
+#extras .compare-table th { color: #fff; border-bottom: none; }
+#add-ons .addon-plan-name { color: #fff; }
+#add-ons .compare-table th:first-child,
+#extras .compare-table th { font-size: 14px; font-weight: 700; }
+#add-ons .addon-plan-desc { color: rgba(255, 255, 255, 0.85); }
 .pipeline-banner-section { position: relative; z-index: 1; padding: 40px 0; }
 .pipeline-banner {
   max-width: 780px;
@@ -2141,6 +2162,7 @@ button { font-family: inherit; cursor: pointer; }
   .booking-section { padding: 128px 0 64px; }
   .booking-embed { height: 640px; }
   .pricing-cards { grid-template-columns: 1fr; }
+  .pricing-wide-body { grid-template-columns: 1fr; gap: 28px; }
   .page-title-section { padding: 48px 0 16px; }
   .page-title-section .section-head h1 { font-size: 30px; }
   .testimonials-grid { grid-template-columns: 1fr; }
