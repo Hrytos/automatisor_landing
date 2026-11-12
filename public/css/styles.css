@@ -434,6 +434,8 @@ button { font-family: inherit; cursor: pointer; }
    Booking (Cal.com embed)
    ========================================================================== */
 .booking-section { position: relative; z-index: 1; padding: 128px 0 100px; }
+.booking-section .booking-note { margin-top: 12px; }
+.booking-section .booking-ps { margin-top: 12px; font-size: 14px; font-style: italic; color: var(--text-tertiary); }
 .booking-embed {
   max-width: 1100px;
   height: 780px;

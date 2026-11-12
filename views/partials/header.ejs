@@ -73,7 +73,7 @@
     <% if (typeof showHeaderActions === 'undefined' || showHeaderActions) { %>
     <div class="header-actions">
       <a href="https://app.automatisor.com/auth" class="btn btn-ghost btn-sm header-login">Log in</a>
-      <a href="https://app.automatisor.com/" class="btn btn-light btn-sm header-cta"><%= headerCtaText %></a>
+      <a href="<%= headerCtaText === 'Start Free Trial' ? '/free-trial' : 'https://app.automatisor.com/' %>" class="btn btn-light btn-sm header-cta"><%= headerCtaText %></a>
       <button type="button" class="mobile-menu-trigger" aria-expanded="false" aria-controls="mobile-nav" aria-label="Open menu">
         <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M2 5h14M2 9h14M2 13h14" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
@@ -84,7 +84,7 @@
   </div>
   <% if (typeof showHeaderActions === 'undefined' || showHeaderActions) { %>
   <div class="mobile-nav" id="mobile-nav" hidden>
-    <a href="https://app.automatisor.com/" class="btn btn-light mobile-nav-cta"><%= headerCtaText %></a>
+    <a href="<%= headerCtaText === 'Start Free Trial' ? '/free-trial' : 'https://app.automatisor.com/' %>" class="btn btn-light mobile-nav-cta"><%= headerCtaText %></a>
 
     <div class="mobile-nav-section">
       <button type="button" class="mobile-nav-section-trigger" aria-expanded="false" aria-controls="mobile-nav-solutions">

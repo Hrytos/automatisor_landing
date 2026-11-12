@@ -13,6 +13,7 @@ const ROUTES = [
   { view: 'demo', out: path.join('demo', 'index.html') },
   { view: 'pricing', out: path.join('pricing', 'index.html') },
   { view: 'features-comparison', out: path.join('features-comparison', 'index.html') },
+  { view: 'free-trial', out: path.join('free-trial', 'index.html') },
   { view: 'ideal-facility-profile', out: path.join('ideal-facility-profile', 'index.html') },
 ];
 
