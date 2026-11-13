@@ -2521,6 +2521,9 @@ button { font-family: inherit; cursor: pointer; }
 #add-ons .compare-table th,
 #extras .compare-table th { color: #fff; border-bottom: none; }
 #add-ons .addon-plan-name { color: #fff; }
+/* Top-align so the option names line up regardless of explainer length */
+#add-ons .compare-table th { vertical-align: top; }
+#add-ons .compare-feature-name { text-transform: uppercase; }
 #add-ons .compare-table th:first-child,
 #extras .compare-table th { font-size: 14px; font-weight: 700; }
 #add-ons .addon-plan-desc { color: rgba(255, 255, 255, 0.85); }
