@@ -456,6 +456,13 @@ button { font-family: inherit; cursor: pointer; }
   text-align: left;
 }
 /* Copy on the left, right column kept free for another section */
+/* Wide layout: halves the default .container side gutter at any desktop width.
+   Shared by the header (all pages) and the home hero. */
+.header-inner,
+.hero-inner { max-width: calc(50vw + 592px); }
+/* Panel below the hero matches the agent flow canvas width */
+.market-panel-wrap > .container { max-width: 1280px; }
+
 .hero-inner {
   display: grid;
   grid-template-columns: 1.15fr 0.85fr;
@@ -1543,13 +1550,6 @@ button { font-family: inherit; cursor: pointer; }
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45), 0 0 0 5px rgba(255, 255, 255, 0.03);
 }
 .flow-tile img { width: 38px; height: auto; }
-.flow-num {
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--brand-orange);
-}
 .flow-title { font-size: 20px; font-weight: 700; letter-spacing: -0.01em; color: var(--text-primary); }
 .flow-desc { font-size: 14px; line-height: 1.5; color: var(--text-secondary); }
 .flow-step-2 .flow-desc, .flow-step-3 .flow-desc { max-width: 280px; }
@@ -1621,7 +1621,7 @@ button { font-family: inherit; cursor: pointer; }
 .flow-down { display: flex; align-items: center; gap: 10px; margin: 6px 0 6px 21px; color: var(--text-tertiary); }
 .flow-pipeline {
   padding: 18px 18px 20px;
-  border: 2px solid rgba(255, 255, 255, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.85);
   border-radius: 24px;
   background: rgba(255, 255, 255, 0.04);
   box-shadow: 0 0 40px rgba(255, 255, 255, 0.07);
