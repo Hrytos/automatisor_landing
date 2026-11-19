@@ -125,6 +125,24 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
+  // Pricing audience tabs: switch <main data-audience> so CSS can hide the
+  // sections/rows that don't apply (anything with .audience-leadgen is hidden
+  // for business development & partner teams).
+  document.querySelectorAll('[data-audience-tabs]').forEach((tabs) => {
+    const main = tabs.closest('main');
+    if (!main) return;
+    tabs.querySelectorAll('.audience-tab').forEach((tab) => {
+      tab.addEventListener('click', () => {
+        main.dataset.audience = tab.dataset.audience;
+        tabs.querySelectorAll('.audience-tab').forEach((t) => {
+          const on = t === tab;
+          t.classList.toggle('is-active', on);
+          t.setAttribute('aria-pressed', on ? 'true' : 'false');
+        });
+      });
+    });
+  });
+
   // Header "Solutions" dropdown: toggles on click, closes on outside click or Escape.
   document.querySelectorAll('.nav-dropdown').forEach((dropdown) => {
     const trigger = dropdown.querySelector('.nav-dropdown-trigger');

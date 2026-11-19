@@ -2122,6 +2122,11 @@ button { font-family: inherit; cursor: pointer; }
    Pricing
    ========================================================================== */
 .pricing-section { position: relative; z-index: 1; padding: 40px 0 120px; }
+/* Two-card variant (partner plans): same card width as the 3-up grid, centred */
+/* Partner cards have no price block yet, so drop the fixed head height */
+.pricing-cards-two .pricing-card-head { height: auto; }
+.pricing-cards-two .pricing-features { margin-top: 28px; }
+.pricing-cards.pricing-cards-two { grid-template-columns: repeat(2, minmax(0, 1fr)); max-width: calc((100% - 48px) * 2 / 3 + 24px); margin: 0 auto; }
 .pricing-cards {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -2158,6 +2163,59 @@ button { font-family: inherit; cursor: pointer; }
   padding: 20px 40px;
   border-radius: var(--radius-lg) var(--radius-lg) 0 0;
 }
+/* Pricing page audience tabs (above the plan cards): two large equal
+   segments, active one uses the plan-card header gradient */
+.audience-tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  width: 100%;
+  max-width: 1056px;
+  margin: 48px auto 8px;
+  padding: 6px;
+  gap: 6px;
+  background: #fff;
+  border: 2px solid #fff;
+  border-radius: var(--radius-pill);
+  box-shadow: 0 20px 40px -20px rgba(0, 0, 0, 0.9);
+}
+.audience-tab {
+  appearance: none;
+  border: none;
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  background: transparent;
+  color: #17171a;
+  padding: 20px 24px;
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+}
+.audience-tab:hover { background: #f1f1ef; color: #17171a; }
+.audience-tab.is-active,
+.audience-tab.is-active:hover {
+  background: linear-gradient(to right, var(--brand-orange), #CC0066);
+  color: #fff;
+  box-shadow: 0 10px 30px -8px rgba(242, 92, 25, 0.6);
+}
+.audience-heading {
+  margin-top: 56px;
+  font-size: 36px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  text-align: center;
+  color: var(--text-primary);
+}
+main[data-audience="bd"] .audience-leadgen { display: none; }
+main:not([data-audience="bd"]) .audience-bd { display: none; }
+@media (max-width: 680px) {
+  .audience-tabs { grid-template-columns: 1fr; margin-top: 32px; border-radius: var(--radius-lg); }
+  .audience-tab { border-radius: 16px; font-size: 14px; padding: 16px; }
+  .audience-heading { margin-top: 40px; font-size: 26px; }
+}
+
 .pricing-toggle {
   display: flex;
   width: fit-content;
@@ -2632,7 +2690,7 @@ button { font-family: inherit; cursor: pointer; }
   .hero-aside { max-width: 520px; width: 100%; margin: 8px auto 0; }
   .booking-section { padding: 128px 0 64px; }
   .booking-embed { height: 640px; }
-  .pricing-cards { grid-template-columns: 1fr; }
+  .pricing-cards, .pricing-cards.pricing-cards-two { grid-template-columns: 1fr; max-width: none; }
   .pricing-wide-body { grid-template-columns: 1fr; gap: 28px; }
   .page-title-section { padding: 48px 0 16px; }
   .page-title-section .section-head h1 { font-size: 30px; }

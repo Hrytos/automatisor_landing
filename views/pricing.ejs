@@ -18,7 +18,7 @@
 
 <%- include('partials/header', { showProductLink: false, headerCtaText: 'Start Free Trial' }) %>
 
-<main>
+<main data-audience="leadgen">
 
 
   <video class="main-bg-video" autoplay muted loop playsinline preload="auto" aria-hidden="true">
@@ -31,13 +31,21 @@
     <div class="container">
       <div class="section-head">
         <h1>The world's first agentic <br> <span class="text-accent">facility acquisition platform</span> <br> for warehouse automation solution providers</h1>
-        <p>Start free, upgrade when you're ready to scale deal pipeline</p>
+        <p>Different plans for different needs</p>
       </div>
+      <!-- Audience tabs: main.js sets data-audience on <main>; CSS hides
+           everything marked .audience-leadgen for business development teams -->
+      <div class="audience-tabs" role="group" aria-label="Choose your team" data-audience-tabs>
+        <button type="button" class="audience-tab is-active" data-audience="leadgen" aria-pressed="true">For lead generation &amp; prospecting teams</button>
+        <button type="button" class="audience-tab" data-audience="bd" aria-pressed="false">For business development &amp; partner teams</button>
+      </div>
+      <h2 class="audience-heading audience-leadgen">Your target accounts, your pipeline.</h2>
+      <h2 class="audience-heading audience-bd">Our target accounts, your pipeline.</h2>
     </div>
   </section>
 
   <!-- ============ PRICING ============ -->
-  <section class="pricing-section" id="pricing">
+  <section class="pricing-section audience-leadgen" id="pricing">
     <div class="container">
       <div class="pricing-toggle" data-pricing-toggle>
         <button type="button" class="pricing-toggle-btn" data-period="monthly">Monthly</button>
@@ -193,6 +201,43 @@
   </section>
 
 
+  <!-- ============ PARTNER PLANS (business development & partner teams tab) ============ -->
+  <section class="pricing-section audience-bd" id="partner-plans">
+    <div class="container">
+      <div class="pricing-cards pricing-cards-two">
+        <div class="pricing-card">
+          <div class="pricing-card-head">
+            <span class="pricing-plan">Referral Partner</span>
+          </div>
+          <ul class="pricing-features">
+            <li><span class="check">&check;</span>Up to 5 confirmed site visits per quarter at facilities that are ideal and ready for your solution</li>
+            <li><span class="check">&check;</span>Facility research + Ask Automatisor for confirmed site visits</li>
+            <li><span class="check">&check;</span>Access to Automatisor platform</li>
+          </ul>
+          <div class="pricing-card-footer">
+            <a href="/demo" class="btn btn-light btn-lg pricing-cta">Talk to us</a>
+          </div>
+        </div>
+
+        <div class="pricing-card">
+          <div class="pricing-card-head">
+            <span class="pricing-plan">Preferred Partner</span>
+          </div>
+          <ul class="pricing-features">
+            <li class="pricing-feature-group"><strong>Everything in Referral Partner, plus</strong></li>
+            <li><span class="check">&check;</span>Uncapped site visits</li>
+            <li><span class="check">&check;</span>Partner co-marketing</li>
+            <li><span class="check">&check;</span>Priority access to opportunities</li>
+            <li><span class="check">&check;</span>Build your non-direct GTM motions</li>
+          </ul>
+          <div class="pricing-card-footer">
+            <a href="/demo" class="btn btn-light btn-lg pricing-cta">Talk to us</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- ============ ADD-ONS ============ -->
   <section class="addons-section" id="add-ons">
     <div class="container">
@@ -211,9 +256,9 @@
             </tr>
           </thead>
           <tbody>
-            <tr><td><span class="compare-feature-cell"><span class="compare-feature-name">Forward Deployed Pipeline Desk</span><span class="compare-feature-desc">Automatisor deploys in-house warehousing GTM experts to do heavy lifting for you - work through target facilites, evaluate signals, draft prospecting plans, orchestrate decisions with your teams & run outreach on your behalf. Allows your teams to spend time on high-value activities <br><br>Collaborate on your Slack/ Teams</span></span></td><td data-label="Try Once"><span class="compare-value">10 facility pack</span></td><td data-label="On Demand"><span class="compare-value">10 facility pack</span></td><td data-label="Always On"><span class="compare-value"><a href="/demo" class="btn btn-dark btn-lg pricing-cta">Talk to us</a></span></td></tr>
-            <tr><td><span class="compare-feature-cell"><span class="compare-feature-name">Hunt in-market facilities</span><span class="compare-feature-desc">Automatisor discovers facilities that show active signals of needing your specific solutions to freshen your pipeline.<br><br>Monitor free for 90 days, keep the ones you want as target facilities</span></span></td><td data-label="Try Once"><span class="compare-value">10 facility pack</span></td><td data-label="On Demand"><span class="compare-value">10 facility pack</span></td><td data-label="Always On"><span class="compare-value"><a href="/demo" class="btn btn-dark btn-lg pricing-cta">Talk to us</a></span></td></tr>
-            <tr><td><span class="compare-feature-cell"><span class="compare-feature-name">Book meetings with good-fits</span><span class="compare-feature-desc">Automatisor books meetings with key people at target accounts that show active signals of needing your specific solutions<br><br> A brief before every meeting, with the right to decline. Meetings that don't meet our qualification critieria are free</span></span></td><td data-label="Try Once"><span class="compare-value">5 meetings pack</span></td><td data-label="On Demand"><span class="compare-value">5 meetings pack</span></td><td data-label="Always On"><span class="compare-value"><a href="/demo" class="btn btn-dark btn-lg pricing-cta">Talk to us</a></span></td></tr>
+            <tr class="audience-leadgen"><td><span class="compare-feature-cell"><span class="compare-feature-name">Forward Deployed Pipeline Desk</span><span class="compare-feature-desc">Automatisor deploys in-house warehousing GTM experts to do heavy lifting for you - work through target facilites, evaluate signals, draft prospecting plans, orchestrate decisions with your teams & run outreach on your behalf. Allows your teams to spend time on high-value activities <br><br>Collaborate on your Slack/ Teams</span></span></td><td data-label="Try Once"><span class="compare-value">10 facility pack</span></td><td data-label="On Demand"><span class="compare-value">10 facility pack</span></td><td data-label="Always On"><span class="compare-value"><a href="/demo" class="btn btn-dark btn-lg pricing-cta">Talk to us</a></span></td></tr>
+            <tr class="audience-leadgen"><td><span class="compare-feature-cell"><span class="compare-feature-name">Hunt in-market facilities</span><span class="compare-feature-desc">Automatisor discovers facilities that show active signals of needing your specific solutions to freshen your pipeline.<br><br>Monitor free for 90 days, keep the ones you want as target facilities</span></span></td><td data-label="Try Once"><span class="compare-value">10 facility pack</span></td><td data-label="On Demand"><span class="compare-value">10 facility pack</span></td><td data-label="Always On"><span class="compare-value"><a href="/demo" class="btn btn-dark btn-lg pricing-cta">Talk to us</a></span></td></tr>
+            <tr class="audience-leadgen"><td><span class="compare-feature-cell"><span class="compare-feature-name">Book meetings with good-fits</span><span class="compare-feature-desc">Automatisor books meetings with key people at target accounts that show active signals of needing your specific solutions<br><br> A brief before every meeting, with the right to decline. Meetings that don't meet our qualification critieria are free</span></span></td><td data-label="Try Once"><span class="compare-value">5 meetings pack</span></td><td data-label="On Demand"><span class="compare-value">5 meetings pack</span></td><td data-label="Always On"><span class="compare-value"><a href="/demo" class="btn btn-dark btn-lg pricing-cta">Talk to us</a></span></td></tr>
             <tr><td><span class="compare-feature-cell"><span class="compare-feature-name">Conduct on-site assessments</span><span class="compare-feature-desc">Automatisor conducts an on-site assessment of a warehousing facility, interviews site teams and submits an industrial engineering report of its operations<br><br> A brief before the site visit. Videos, photos, data, analysis and expert consultation after. Assessments that don't meet our qualification critieria are revised for free</span></span></td><td data-label="Try Once"><span class="compare-value">1 facility assessment pack</span></td><td data-label="On Demand"><span class="compare-value">1 facility assessment pack</span></td><td data-label="Always On"><span class="compare-value"><a href="/demo" class="btn btn-dark btn-lg pricing-cta">Talk to us</a></span></td></tr>
             <tr><td><span class="compare-feature-cell"><span class="compare-feature-name">Facility Data Prep</span><span class="compare-feature-desc">Automatisor turns a site's raw data into clean, standardized, analysis-ready datasets in hours, not weeks. <br><br>You get clean, standardized, export-ready data complete with a data inventory list, quality report, operational profiles, digitized layouts & an assumptions log. Ask Automatisor for inferences on your data</span></span></td><td data-label="Try Once"><span class="compare-value">1 facility pack</span></td><td data-label="On Demand"><span class="compare-value">1 facility pack</span></td><td data-label="Always On"><span class="compare-value"><a href="/demo" class="btn btn-dark btn-lg pricing-cta">Talk to us</a></span></td></tr>          
           </tbody>
@@ -223,7 +268,7 @@
   </section>
 
   <!-- ============ EXTRAS ============ -->
-  <section class="addons-section" id="extras">
+  <section class="addons-section audience-leadgen" id="extras">
     <div class="container">
       <div class="section-head section-head-center">
         <h2>Extras</h2>
@@ -250,7 +295,7 @@
   </section>
 
   <!-- ============ BUILD MY PIPELINE BANNER ============ -->
-  <section class="pipeline-banner-section">
+  <section class="pipeline-banner-section audience-leadgen">
     <div class="container">
       <div class="pipeline-banner">
         <h2>Tailored plans for Enterprise needs</h2>
