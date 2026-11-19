@@ -2426,7 +2426,6 @@ main:not([data-audience="bd"]) .audience-bd { display: none; }
    Page title (secondary pages, e.g. /pricing)
    ========================================================================== */
 .page-title-section { position: relative; z-index: 1; padding: 64px 0 24px; }
-.page-title-section .page-title-center { max-width: 640px; margin: 0 auto; text-align: center; }
 .page-title-section .section-head h1 {
   font-size: 42px;
   font-weight: 700;
